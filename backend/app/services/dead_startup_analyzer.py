@@ -174,3 +174,4 @@ def analyze_dead_startup_gaps(db: Session) -> List[Gap]:
         db.commit()
 
     return created_gaps
+
