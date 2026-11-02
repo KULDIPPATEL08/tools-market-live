@@ -8,20 +8,40 @@ TECH_NEWS_FEEDS = [
     {
         "name": "TechCrunch AI & Startups",
         "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
-        "category": "Tech News & Startups"
+        "category": "AI News"
     },
     {
-        "name": "The Verge Tech",
+        "name": "VentureBeat AI Horizon",
+        "url": "https://venturebeat.com/category/ai/feed/",
+        "category": "AI Models"
+    },
+    {
+        "name": "The Verge Tech & Wire",
         "url": "https://www.theverge.com/rss/index.xml",
-        "category": "Tech News & Startups"
+        "category": "Technology News"
     },
     {
-        "name": "Ars Technica",
+        "name": "Ars Technica Enterprise",
         "url": "https://feeds.arstechnica.com/arstechnica/index",
-        "category": "Technology"
+        "category": "Technology News"
     },
     {
-        "name": "Dev.to Top Tech",
+        "name": "The Hacker News Alerts",
+        "url": "https://feeds.feedburner.com/TheHackersNews",
+        "category": "Cybersecurity Updates"
+    },
+    {
+        "name": "Inc42 Indian Startups & Funding",
+        "url": "https://inc42.com/feed/",
+        "category": "India Startup News"
+    },
+    {
+        "name": "YourStory Indian Innovation",
+        "url": "https://yourstory.com/feed",
+        "category": "India Startup News"
+    },
+    {
+        "name": "Dev.to Open Source & Tooling",
         "url": "https://dev.to/feed",
         "category": "Developer Tools"
     }
@@ -56,6 +76,16 @@ async def fetch_live_tech_news(limit_per_feed: int = 5) -> List[Dict[str, Any]]:
                         import re
                         clean_summary = re.sub(r'<[^>]+>', '', summary)[:280]
 
+                        # Detect category specialization
+                        category = feed_meta["category"]
+                        text_to_check = f"{title} {clean_summary}".lower()
+                        if any(kw in text_to_check for kw in ["gujarat", "ahmedabad", "gandhinagar", "gift city", "surat"]):
+                            category = "Gujarat Startup News"
+                        elif "funding" in text_to_check or "raises" in text_to_check or "series a" in text_to_check:
+                            category = "Startup Funding"
+                        elif "launch" in text_to_check or "launches" in text_to_check:
+                            category = "Startup Launches"
+
                         feed_records.append({
                             "title": title,
                             "description": clean_summary or f"Breaking coverage via {feed_meta['name']}",
@@ -63,10 +93,11 @@ async def fetch_live_tech_news(limit_per_feed: int = 5) -> List[Dict[str, Any]]:
                             "original_url": link,
                             "author": author,
                             "published_at": datetime.utcnow(),
-                            "tags": f"Breaking, {feed_meta['name']}, TechNews",
-                            "category": feed_meta["category"],
+                            "tags": f"Breaking, {feed_meta['name']}, TechNews, {category}",
+                            "category": category,
                             "metadata": {
-                                "publication": feed_meta["name"]
+                                "publication": feed_meta["name"],
+                                "credibility": "verified_press"
                             }
                         })
         except Exception:

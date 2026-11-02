@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     # Connectors
     GITHUB_API_TOKEN: str = ""
     
+    # Universal Search Providers (Free-first by default)
+    SEARCH_PROVIDER: str = "auto"  # auto, duckduckgo, brave, tavily, local
+    BRAVE_API_KEY: str = ""
+    TAVILY_API_KEY: str = ""
+    
     @property
     def cors_origin_list(self) -> List[str]:
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]

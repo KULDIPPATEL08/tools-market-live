@@ -14,6 +14,10 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 import { AutomationPage } from './pages/AutomationPage';
 import { SavedItemsPage } from './pages/SavedItemsPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { UniversalSearchPage } from './pages/UniversalSearchPage';
+import { StartupRadarPage } from './pages/StartupRadarPage';
+import { AIRadarPage } from './pages/AIRadarPage';
+import { BriefingsPage } from './pages/BriefingsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +37,10 @@ export const App: React.FC = () => {
             <Route index element={<Navigate to="/overview" replace />} />
             <Route path="overview" element={<OverviewDashboard />} />
             <Route path="discover" element={<DiscoverPage />} />
+            <Route path="search" element={<UniversalSearchPage />} />
+            <Route path="startups" element={<StartupRadarPage />} />
+            <Route path="ai-radar" element={<AIRadarPage />} />
+            <Route path="briefings" element={<BriefingsPage />} />
             <Route path="collection" element={<CollectionJobsPage />} />
             <Route path="sources" element={<SourcesPage />} />
             <Route path="research" element={<ResearchWorkspacePage />} />

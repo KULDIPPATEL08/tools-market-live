@@ -17,7 +17,9 @@ import {
   Command,
   Activity,
   Zap,
-  Globe
+  Globe,
+  Building,
+  TrendingUp,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useUIStore } from '../../store';
@@ -36,7 +38,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       items: [
         { to: '/overview', label: 'Overview', icon: LayoutDashboard },
         { to: '/discover', label: 'Live Intel Feed', icon: Activity, badge: 'LIVE' },
-        { to: '/gaps', label: 'Startup Radar', icon: Compass },
+        { to: '/search', label: 'Universal Search', icon: Search, badge: 'OMNI' },
+        { to: '/startups', label: 'Startup Radar', icon: Building },
+        { to: '/ai-radar', label: 'AI Radar', icon: Cpu },
+        { to: '/briefings', label: 'Briefings', icon: Sparkles },
+        { to: '/gaps', label: 'Market Voids', icon: Compass },
       ],
     },
     {

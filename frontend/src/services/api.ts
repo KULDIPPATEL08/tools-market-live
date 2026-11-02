@@ -304,4 +304,89 @@ export const api = {
       body: JSON.stringify({ question, mode, context_record_ids }),
     });
   },
+
+  // Universal Web Search
+  async search(data: { query: string; mode?: string; provider?: string; max_results?: number }) {
+    return fetchJSON<import('../types').SearchResponse>(`${BASE_URL}/search`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+  async getSearchHistory(limit: number = 20) {
+    return fetchJSON<{ id: number; query: string; mode: string; provider: string; results_count: number; created_at: string }[]>(
+      `${BASE_URL}/search/history?limit=${limit}`
+    );
+  },
+  async clearSearchHistory() {
+    return fetchJSON<{ message: string }>(`${BASE_URL}/search/history`, { method: 'DELETE' });
+  },
+  async saveSearchToResearch(data: { project_id: number; title: string; url: string; snippet: string; source: string; notes?: string }) {
+    return fetchJSON<{ status: string; evidence_id: number }>(`${BASE_URL}/search/save-to-research`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Startup Radar
+  async getStartups(params?: {
+    industry?: string;
+    stage?: string;
+    country?: string;
+    is_india?: boolean;
+    is_gujarat?: boolean;
+    is_dead?: boolean;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const query = new URLSearchParams();
+    if (params?.industry) query.set('industry', params.industry);
+    if (params?.stage) query.set('stage', params.stage);
+    if (params?.country) query.set('country', params.country);
+    if (params?.is_india !== undefined) query.set('is_india', params.is_india.toString());
+    if (params?.is_gujarat !== undefined) query.set('is_gujarat', params.is_gujarat.toString());
+    if (params?.is_dead !== undefined) query.set('is_dead', params.is_dead.toString());
+    if (params?.search) query.set('search', params.search);
+    if (params?.limit) query.set('limit', params.limit.toString());
+    if (params?.offset) query.set('offset', params.offset.toString());
+    return fetchJSON<{ total: number; items: import('../types').Startup[] }>(`${BASE_URL}/startups?${query.toString()}`);
+  },
+  async getStartupMetrics() {
+    return fetchJSON<import('../types').StartupMetrics>(`${BASE_URL}/startups/metrics/overview`);
+  },
+  async createStartup(data: Partial<import('../types').Startup>) {
+    return fetchJSON<{ message: string; id: number }>(`${BASE_URL}/startups`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+  async deleteStartup(id: number) {
+    return fetchJSON<{ message: string }>(`${BASE_URL}/startups/${id}`, { method: 'DELETE' });
+  },
+
+  // AI Radar
+  async getAIModels(params?: { organization?: string; is_open_weights?: boolean; search?: string }) {
+    const query = new URLSearchParams();
+    if (params?.organization) query.set('organization', params.organization);
+    if (params?.is_open_weights !== undefined) query.set('is_open_weights', params.is_open_weights.toString());
+    if (params?.search) query.set('search', params.search);
+    return fetchJSON<import('../types').AIModel[]>(`${BASE_URL}/ai-radar/models?${query.toString()}`);
+  },
+  async getAIBenchmarks() {
+    return fetchJSON<import('../types').AIBenchmarkItem[]>(`${BASE_URL}/ai-radar/benchmarks`);
+  },
+  async getAIPapers(limit: number = 25) {
+    return fetchJSON<import('../types').AIPaper[]>(`${BASE_URL}/ai-radar/papers?limit=${limit}`);
+  },
+
+  // Intelligence Briefings
+  async getBriefings(limit: number = 10) {
+    return fetchJSON<import('../types').IntelligenceBriefing[]>(`${BASE_URL}/briefings?limit=${limit}`);
+  },
+  async generateBriefing(data: { briefing_type: string; title?: string }) {
+    return fetchJSON<import('../types').IntelligenceBriefing>(`${BASE_URL}/briefings/generate`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
 };

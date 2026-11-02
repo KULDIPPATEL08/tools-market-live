@@ -18,6 +18,10 @@ from backend.app.api import (
     notifications,
     ai,
     export,
+    search,
+    startups,
+    ai_radar,
+    briefings,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -75,6 +79,10 @@ app.include_router(automation.router, prefix=api_v1)
 app.include_router(notifications.router, prefix=api_v1)
 app.include_router(ai.router, prefix=api_v1)
 app.include_router(export.router, prefix=api_v1)
+app.include_router(search.router, prefix=api_v1)
+app.include_router(startups.router, prefix=api_v1)
+app.include_router(ai_radar.router, prefix=api_v1)
+app.include_router(briefings.router, prefix=api_v1)
 
 # Serve Frontend static assets in production if available
 frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/dist"))

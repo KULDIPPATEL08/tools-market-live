@@ -9,6 +9,10 @@ from backend.app.models.research import ResearchProject, ResearchNote, ResearchE
 from backend.app.models.gap import Gap
 from backend.app.models.automation import AutomationRule
 from backend.app.models.notification import Notification
+from backend.app.models.startup import Startup
+from backend.app.models.ai_model import AIModelRecord
+from backend.app.services.startup_radar import seed_default_startups
+from backend.app.services.ai_radar_service import seed_default_ai_models
 from backend.app.services.deduplication import generate_fingerprint
 
 logging.basicConfig(level=logging.INFO)
@@ -289,6 +293,10 @@ def init_database():
             )
             db.add(notif)
             db.commit()
+
+        # 8. Seed Default Startups and AI Models
+        seed_default_startups(db)
+        seed_default_ai_models(db)
 
     finally:
         db.close()

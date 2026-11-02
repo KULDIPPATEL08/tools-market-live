@@ -7,6 +7,10 @@ from backend.app.models.research import ResearchProject, ResearchNote, ResearchE
 from backend.app.models.gap import Gap
 from backend.app.models.automation import AutomationRule
 from backend.app.models.notification import Notification
+from backend.app.models.startup import Startup
+from backend.app.models.ai_model import AIModelRecord
+from backend.app.models.briefing import IntelligenceBriefing
+from backend.app.models.search_history import SearchQueryLog
 
 __all__ = [
     "Base",
@@ -20,5 +24,8 @@ __all__ = [
     "Gap",
     "AutomationRule",
     "Notification",
+    "Startup",
+    "AIModelRecord",
+    "IntelligenceBriefing",
+    "SearchQueryLog",
 ]
-
