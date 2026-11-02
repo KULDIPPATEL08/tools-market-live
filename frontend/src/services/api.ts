@@ -174,14 +174,18 @@ export const api = {
   },
 
   // Intelligence Gaps
-  async getGaps(params?: { status?: string; priority?: string }) {
+  async getGaps(params?: { status?: string; priority?: string; category?: string }) {
     const query = new URLSearchParams();
     if (params?.status) query.set('status', params.status);
     if (params?.priority) query.set('priority', params.priority);
+    if (params?.category) query.set('category', params.category);
     return fetchJSON<Gap[]>(`${BASE_URL}/gaps?${query.toString()}`);
   },
   async detectGaps() {
     return fetchJSON<Gap[]>(`${BASE_URL}/gaps/detect`, { method: 'POST' });
+  },
+  async scanDeadStartups() {
+    return fetchJSON<Gap[]>(`${BASE_URL}/gaps/scan-dead-startups`, { method: 'POST' });
   },
   async createGap(data: Partial<Gap>) {
     return fetchJSON<Gap>(`${BASE_URL}/gaps`, {
@@ -208,6 +212,17 @@ export const api = {
   },
 
   // Tools
+  async getCuratedTools() {
+    return fetchJSON<any[]>(`${BASE_URL}/tools/curated-tools`);
+  },
+  async gatherTool(queryOrUrl: string) {
+    const formData = new FormData();
+    formData.append('query_or_url', queryOrUrl);
+    return fetchJSON<any>(`${BASE_URL}/tools/gather-tool`, {
+      method: 'POST',
+      body: formData,
+    });
+  },
   async collectUrl(url: string, save_to_records: boolean = true) {
     const formData = new FormData();
     formData.append('url', url);

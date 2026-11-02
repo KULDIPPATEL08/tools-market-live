@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from backend.app.models.record import CollectedRecord
 from backend.app.models.gap import Gap
 from backend.app.models.notification import Notification
+from backend.app.services.dead_startup_analyzer import analyze_dead_startup_gaps
 
 QUESTION_PATTERNS = [
     r"how (can|do|should|to)\b",
@@ -74,6 +75,10 @@ def analyze_and_generate_gaps(db: Session) -> List[Gap]:
                 )
                 db.add(gap)
                 identified_gaps.append(gap)
+
+    # Also analyze dead startups and market voids
+    dead_startup_gaps = analyze_dead_startup_gaps(db)
+    identified_gaps.extend(dead_startup_gaps)
 
     if identified_gaps:
         notif = Notification(

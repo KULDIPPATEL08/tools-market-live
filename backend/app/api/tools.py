@@ -10,8 +10,28 @@ from backend.app.models.source import Source
 from backend.app.services.connectors.webpage import fetch_webpage
 from backend.app.services.connectors.file_importer import parse_csv_data, parse_json_data
 from backend.app.services.deduplication import generate_fingerprint, calculate_quality_score
+from backend.app.services.tool_gatherer import gather_tool_from_input, CURATED_BEST_TOOLS
 
 router = APIRouter(prefix="/tools", tags=["Tools Workspace"])
+
+@router.get("/curated-tools")
+def get_curated_tools():
+    """Returns top vetted developer, AI, and intelligence gathering tools."""
+    return CURATED_BEST_TOOLS
+
+@router.post("/gather-tool")
+async def gather_tool_endpoint(
+    query_or_url: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Actively hunts, extracts metadata, stars, tech stack, and indexes any GitHub repo or tool website.
+    """
+    try:
+        result = await gather_tool_from_input(query_or_url, db)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/collect-url")
 async def collect_url_tool(

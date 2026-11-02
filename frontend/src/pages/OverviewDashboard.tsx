@@ -134,6 +134,81 @@ export const OverviewDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* Intelligence & Strategic Action Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <NavLink
+          to="/gaps"
+          className="antigravity-card p-4 rounded-xl border-rose-500/30 bg-rose-950/10 hover:border-rose-500/60 transition-all group flex flex-col justify-between"
+        >
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                VENTURE OPPORTUNITY
+              </span>
+              <span className="text-xs text-rose-400 font-mono font-semibold">96/100 Index</span>
+            </div>
+            <h3 className="text-sm font-bold text-white group-hover:text-rose-200 transition-colors">
+              Dead Startup Graveyard & Voids
+            </h3>
+            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+              Analyze failed & sunset products (Mint, Skiff, Sunrise, Artifact) to capture stranded customers and market share.
+            </p>
+          </div>
+          <div className="pt-3 mt-2 border-t border-rose-500/20 flex items-center justify-between text-xs font-mono text-rose-300">
+            <span>Explore Blueprints</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </NavLink>
+
+        <NavLink
+          to="/tools?tab=tool-gatherer"
+          className="antigravity-card p-4 rounded-xl border-purple-500/30 bg-purple-950/10 hover:border-purple-500/60 transition-all group flex flex-col justify-between"
+        >
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                TOOL HUNTER
+              </span>
+              <span className="text-xs text-purple-400 font-mono font-semibold">Auto-Enriching</span>
+            </div>
+            <h3 className="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">
+              Tool Gathering & Best Tools Hub
+            </h3>
+            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+              Harvest any GitHub repository or AI model stack. Track live stars, forks, license types, and curate top tools.
+            </p>
+          </div>
+          <div className="pt-3 mt-2 border-t border-purple-500/20 flex items-center justify-between text-xs font-mono text-purple-300">
+            <span>Gather New Tool</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </NavLink>
+
+        <NavLink
+          to="/tools?tab=batch-scraper"
+          className="antigravity-card p-4 rounded-xl border-amber-500/30 bg-amber-950/10 hover:border-amber-500/60 transition-all group flex flex-col justify-between"
+        >
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                FAST CRAWLER
+              </span>
+              <span className="text-xs text-amber-400 font-mono font-semibold">10x Parallel</span>
+            </div>
+            <h3 className="text-sm font-bold text-white group-hover:text-amber-200 transition-colors">
+              High-Speed Web Batch Scraper
+            </h3>
+            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+              Paste up to 20 URLs and scrape concurrently with async worker pooling, SSRF safeguards, and DOM cleaning.
+            </p>
+          </div>
+          <div className="pt-3 mt-2 border-t border-amber-500/20 flex items-center justify-between text-xs font-mono text-amber-300">
+            <span>Launch Batch Scraper</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </NavLink>
+      </div>
+
       {/* Main Grid: Discoveries Feed & System Status */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Recent Intelligence Discoveries */}
@@ -269,10 +344,10 @@ export const OverviewDashboard: React.FC = () => {
             </div>
             <div className="pt-4 border-t border-slate-800/80 mt-4">
               <NavLink
-                to="/tools?tab=gap-board"
+                to="/gaps"
                 className="text-xs text-purple-400 hover:text-purple-300 font-medium flex items-center justify-center space-x-1"
               >
-                <span>Open Gap Board</span>
+                <span>Open Market Gaps & Radar</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </NavLink>
             </div>

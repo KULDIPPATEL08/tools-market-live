@@ -29,6 +29,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/sources', label: 'Sources', icon: Radio },
     { to: '/research', label: 'Research', icon: FileText },
     { to: '/tools', label: 'Tools', icon: Wrench },
+    { to: '/gaps', label: 'Market Gaps', icon: Sparkles },
     { to: '/datasets', label: 'Datasets', icon: Database },
     { to: '/analytics', label: 'Analytics', icon: BarChart2 },
     { to: '/automation', label: 'Automation', icon: Cpu },

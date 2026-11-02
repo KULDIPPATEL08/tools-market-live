@@ -37,6 +37,7 @@ export const App: React.FC = () => {
             <Route path="sources" element={<SourcesPage />} />
             <Route path="research" element={<ResearchWorkspacePage />} />
             <Route path="tools" element={<ToolsWorkspacePage />} />
+            <Route path="gaps" element={<GapBoardPage />} />
             <Route path="datasets" element={<DatasetExplorerPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="automation" element={<AutomationPage />} />

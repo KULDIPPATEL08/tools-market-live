@@ -134,3 +134,32 @@ async def test_analytics_metrics(async_client):
     data = resp.json()
     assert data["total_records"] >= 1
     assert data["active_sources"] >= 1
+
+@pytest.mark.asyncio
+async def test_dead_startup_gap_scanning(async_client):
+    resp = await async_client.post("/api/v1/gaps/scan-dead-startups")
+    assert resp.status_code == 200
+    gaps = resp.json()
+    assert len(gaps) >= 1
+    assert any("Mint" in g["title"] or "Skiff" in g["title"] or "Sunrise" in g["title"] for g in gaps)
+    assert any("Dead Startup Gap" in g["category"] for g in gaps)
+
+@pytest.mark.asyncio
+async def test_tool_gathering_engine(async_client):
+    # Test curated tools catalog
+    resp = await async_client.get("/api/v1/tools/curated-tools")
+    assert resp.status_code == 200
+    curated = resp.json()
+    assert len(curated) >= 5
+    assert any(t["name"] == "vLLM" or t["name"] == "Ollama" for t in curated)
+
+    # Test gathering a repo
+    resp2 = await async_client.post(
+        "/api/v1/tools/gather-tool",
+        data={"query_or_url": "vllm-project/vllm"}
+    )
+    assert resp2.status_code == 200
+    res = resp2.json()
+    assert res["status"] == "gathered"
+    assert "tool" in res
+    assert res["tool"]["name"] == "vLLM" or "vllm" in res["tool"]["name"].lower()

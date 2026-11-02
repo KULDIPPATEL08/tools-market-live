@@ -7,6 +7,7 @@ from backend.app.core.database import get_db
 from backend.app.models.gap import Gap
 from backend.app.schemas.all_schemas import GapCreate, GapUpdate, GapResponse
 from backend.app.services.gap_detector import analyze_and_generate_gaps
+from backend.app.services.dead_startup_analyzer import analyze_dead_startup_gaps
 
 router = APIRouter(prefix="/gaps", tags=["Intelligence Gap Detection"])
 
@@ -14,6 +15,7 @@ router = APIRouter(prefix="/gaps", tags=["Intelligence Gap Detection"])
 def list_gaps(
     status: Optional[str] = None,
     priority: Optional[str] = None,
+    category: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     query = db.query(Gap)
@@ -21,7 +23,15 @@ def list_gaps(
         query = query.filter(Gap.status == status)
     if priority:
         query = query.filter(Gap.priority == priority)
+    if category:
+        query = query.filter(Gap.category.ilike(f"%{category}%"))
     return query.order_by(desc(Gap.created_at)).all()
+
+@router.post("/scan-dead-startups", response_model=List[GapResponse])
+def scan_dead_startups(db: Session = Depends(get_db)):
+    """Runs targeted intelligence analysis on dead startups, discontinued products, and post-mortems."""
+    analyze_dead_startup_gaps(db)
+    return db.query(Gap).filter(Gap.category == "Dead Startup Gap").order_by(desc(Gap.priority)).all()
 
 @router.post("/detect", response_model=List[GapResponse])
 def detect_gaps_now(db: Session = Depends(get_db)):
