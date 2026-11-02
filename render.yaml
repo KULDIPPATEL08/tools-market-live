@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: scoutboard
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "false"
+      - key: DATABASE_URL
+        value: "sqlite:///./scoutboard.db"
+      - key: AI_PROVIDER
+        value: "local"
