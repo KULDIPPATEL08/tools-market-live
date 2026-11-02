@@ -14,3 +14,4 @@ services:
         value: "sqlite:///./scoutboard.db"
       - key: AI_PROVIDER
         value: "local"
+

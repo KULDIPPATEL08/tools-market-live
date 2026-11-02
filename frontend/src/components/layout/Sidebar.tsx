@@ -61,9 +61,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <Compass className="w-5 h-5 transition-transform group-hover:rotate-45" />
             </div>
             <div>
-              <span className="font-bold text-base tracking-wide text-white">SCOUTBOARD</span>
-              <span className="block text-[10px] font-mono font-medium text-sky-400 tracking-wider uppercase">
-                Intelligence
+              <span className="font-bold text-base tracking-wide text-white">TOOLS MARKET</span>
+              <span className="block text-[10px] font-mono font-medium text-emerald-400 tracking-wider uppercase">
+                LIVE INTELLIGENCE
               </span>
             </div>
           </NavLink>

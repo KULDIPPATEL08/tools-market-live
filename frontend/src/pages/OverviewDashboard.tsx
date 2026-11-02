@@ -51,11 +51,11 @@ export const OverviewDashboard: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-800/80">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center space-x-3">
-            <span>Intelligence Overview</span>
+            <span>Tools Market Live</span>
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Real-time multi-source data collection, verification, and research synthesis node.
+            Real-time multi-source data collection, verification, tools catalog, and market intelligence node.
           </p>
         </div>
 

@@ -58,3 +58,4 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: scoutboard:latest
+
