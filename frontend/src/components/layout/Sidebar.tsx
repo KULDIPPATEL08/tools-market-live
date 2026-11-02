@@ -18,7 +18,7 @@ import {
   Activity,
   Zap,
   Globe,
-  Building,
+  Building2,
   TrendingUp,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -39,7 +39,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         { to: '/overview', label: 'Overview', icon: LayoutDashboard },
         { to: '/discover', label: 'Live Intel Feed', icon: Activity, badge: 'LIVE' },
         { to: '/search', label: 'Universal Search', icon: Search, badge: 'OMNI' },
-        { to: '/startups', label: 'Startup Radar', icon: Building },
+        { to: '/startups', label: 'Startup Radar', icon: Building2 },
         { to: '/ai-radar', label: 'AI Radar', icon: Cpu },
         { to: '/briefings', label: 'Briefings', icon: Sparkles },
         { to: '/gaps', label: 'Market Voids', icon: Compass },
