@@ -12,12 +12,17 @@ import {
   SlidersHorizontal,
   FileCheck,
   Check,
+  Terminal,
+  Cpu,
+  Layers,
+  Radio,
+  Newspaper,
+  BookOpen
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CollectedRecord } from '../types';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { Modal } from '../components/ui/Modal';
 import { LoadingSkeleton } from '../components/ui/LoadingSkeleton';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -118,91 +123,110 @@ export const DiscoverPage: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const sourceHubs = [
+    { id: '', label: 'ALL FEEDS', icon: Terminal },
+    { id: 'reddit', label: 'REDDIT LIVE', icon: Radio },
+    { id: 'huggingface', label: 'HUGGING FACE', icon: Cpu },
+    { id: 'technews', label: 'TECH WIRE', icon: Newspaper },
+    { id: 'github', label: 'OPEN SOURCE', icon: Layers },
+    { id: 'hackernews', label: 'HACKER NEWS', icon: BookOpen },
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Title & Filter Controls Bar */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2 border-b border-slate-800/80">
+      {/* Top Header - Retro Cyber Terminal Style */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-3 border-b border-slate-800">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Discovery Engine</h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Search, filter, and analyze verified intelligence records collected from primary sources.
+          <div className="flex items-center space-x-2">
+            <Terminal className="w-5 h-5 text-emerald-400" />
+            <h1 className="text-xl font-mono font-bold tracking-tight text-white uppercase">
+              Live Intelligence Terminal
+            </h1>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              [ONLINE // STREAMING]
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 font-mono mt-1">
+            Real-time multi-source crawler stream across Reddit, Hugging Face, Tech News, GitHub & HN.
           </p>
         </div>
 
-        {/* Sort Selector */}
-        <div className="flex items-center space-x-2">
-          <SlidersHorizontal className="w-4 h-4 text-slate-500" />
-          <span className="text-xs text-slate-400 font-mono">SORT BY:</span>
+        {/* Sort Controls */}
+        <div className="flex items-center space-x-2 bg-[#0C111A] p-1.5 rounded-lg border border-slate-800">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-[11px] text-slate-400 font-mono">SORT:</span>
           <select
             value={sortBy}
             onChange={(e) => handleSortChange(e.target.value)}
-            className="bg-space-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500/50 cursor-pointer"
+            className="bg-[#070A0F] border border-slate-700/80 rounded px-2 py-1 text-xs font-mono text-slate-200 focus:outline-none focus:border-emerald-400 cursor-pointer"
           >
-            <option value="recent">Most Recent</option>
-            <option value="quality">Highest Quality Score</option>
-            <option value="relevance">Relevance Score</option>
-            <option value="oldest">Oldest First</option>
+            <option value="recent">MOST RECENT</option>
+            <option value="quality">HIGHEST QUALITY</option>
+            <option value="oldest">OLDEST FIRST</option>
           </select>
         </div>
       </div>
 
-      {/* Search Input Bar */}
+      {/* Primary Dedicated Station Tabs (Reddit, Hugging Face, Tech News) */}
+      <div className="flex flex-wrap items-center gap-2 bg-[#090D14] p-2 rounded-xl border border-slate-800">
+        {sourceHubs.map((hub) => {
+          const Icon = hub.icon;
+          const isActive = selectedSourceType === hub.id;
+          return (
+            <button
+              key={hub.id}
+              onClick={() => handleTypeSelect(hub.id)}
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-sm font-semibold'
+                  : 'text-slate-400 hover:text-white hover:bg-[#121824] border border-transparent'
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              <span>[{hub.label}]</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Search Input Bar - High-Contrast Monospace */}
       <div className="relative">
-        <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+        <Search className="absolute left-3.5 top-3 w-4 h-4 text-emerald-400" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
-          placeholder="Filter discoveries by keyword, author, tag, or topic..."
-          className="w-full bg-space-800/90 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/50 shadow-inner"
+          placeholder="SEARCH RAW STREAM (LLMS, PAPERS, VLLM, REPOS, BREAKING TECH)..."
+          className="w-full bg-[#090D14] border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400 shadow-inner"
         />
       </div>
 
-      {/* Filter Chips: Category & Source Types */}
-      <div className="space-y-2">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] font-mono text-slate-500 mr-2 uppercase">Category:</span>
+      {/* Category Pills */}
+      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+        <span className="text-[10px] font-mono text-slate-500 mr-1 uppercase">TOPIC:</span>
+        <button
+          onClick={() => handleCategorySelect('')}
+          className={`px-2 py-0.5 text-[11px] font-mono rounded border transition-colors cursor-pointer ${
+            !selectedCategory
+              ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40 font-semibold'
+              : 'bg-[#0A0E17] text-slate-400 border-slate-800 hover:border-slate-700'
+          }`}
+        >
+          ALL TOPICS
+        </button>
+        {categories?.map((c) => (
           <button
-            onClick={() => handleCategorySelect('')}
-            className={`px-2.5 py-1 text-xs rounded-lg border transition-colors cursor-pointer ${
-              !selectedCategory
-                ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 font-semibold'
-                : 'bg-space-800 text-slate-400 border-slate-800 hover:border-slate-700'
+            key={c.category}
+            onClick={() => handleCategorySelect(c.category)}
+            className={`px-2 py-0.5 text-[11px] font-mono rounded border transition-colors cursor-pointer ${
+              selectedCategory === c.category
+                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40 font-semibold'
+                : 'bg-[#0A0E17] text-slate-400 border-slate-800 hover:border-slate-700'
             }`}
           >
-            All Categories
+            {c.category.toUpperCase()} ({c.count})
           </button>
-          {categories?.map((c) => (
-            <button
-              key={c.category}
-              onClick={() => handleCategorySelect(c.category)}
-              className={`px-2.5 py-1 text-xs rounded-lg border transition-colors cursor-pointer ${
-                selectedCategory === c.category
-                  ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 font-semibold'
-                  : 'bg-space-800 text-slate-400 border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              {c.category} ({c.count})
-            </button>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] font-mono text-slate-500 mr-2 uppercase">Connector:</span>
-          {['rss', 'reddit', 'huggingface', 'technews', 'github', 'hackernews', 'webpage', 'file'].map((type) => (
-            <button
-              key={type}
-              onClick={() => handleTypeSelect(type)}
-              className={`px-2 py-0.5 text-xs font-mono rounded border uppercase transition-colors cursor-pointer ${
-                selectedSourceType === type
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-semibold'
-                  : 'bg-space-800 text-slate-500 border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
 
       {/* Records Feed */}
@@ -210,160 +234,168 @@ export const DiscoverPage: React.FC = () => {
         <LoadingSkeleton rows={5} />
       ) : records?.length === 0 ? (
         <EmptyState
-          icon={<Search className="w-8 h-8" />}
-          title="No Discoveries Found"
-          description="Try broadening your search query or check the Collection and Sources pages to sync additional feeds."
+          icon={<Search className="w-8 h-8 text-slate-500" />}
+          title="No Intel Records In This Filter"
+          description="Click 'ALL FEEDS' or check the live ticker to sync new signals."
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {records?.map((record) => (
-            <div
-              key={record.id}
-              className="antigravity-card rounded-xl p-5 flex flex-col justify-between space-y-4"
-            >
-              {/* Header Badges */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="cyan">{record.category}</Badge>
-                    <span className="text-[11px] font-mono text-slate-400">
-                      via {record.source_name || record.source_type}
-                    </span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {records?.map((record) => {
+            const isReddit = record.source_type === 'reddit';
+            const isHF = record.source_type === 'huggingface';
+            const isTechNews = record.source_type === 'technews';
 
-                  <div className="flex items-center space-x-1">
+            return (
+              <div
+                key={record.id}
+                className="bg-[#090D14] border border-slate-800 rounded-xl p-4 flex flex-col justify-between space-y-3 transition-all hover:border-emerald-500/60"
+              >
+                {/* Header Badges */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1.5 flex-wrap">
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                        isReddit
+                          ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                          : isHF
+                          ? 'bg-sky-500/10 text-sky-300 border-sky-500/30'
+                          : isTechNews
+                          ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                          : 'bg-slate-800 text-slate-300 border-slate-700'
+                      }`}>
+                        [{(record.source_type || 'web').toUpperCase()}]
+                      </span>
+
+                      <span className="text-[10px] font-mono text-slate-400 bg-[#06090E] px-2 py-0.5 rounded border border-slate-800">
+                        {record.category}
+                      </span>
+                    </div>
+
                     <span
                       title="Quality score based on data completeness"
-                      className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      className="text-[10px] font-mono font-bold text-emerald-400 bg-[#06090E] px-2 py-0.5 rounded border border-slate-800"
                     >
-                      QS: {record.quality_score}
+                      QS: {record.quality_score}/100
                     </span>
                   </div>
-                </div>
 
-                <a
-                  href={record.original_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-base font-semibold text-slate-100 hover:text-sky-300 transition-colors block leading-snug line-clamp-2"
-                >
-                  {record.title}
-                </a>
-
-                {record.description && (
-                  <p className="text-xs text-slate-400 line-clamp-3 leading-relaxed">
-                    {record.description}
-                  </p>
-                )}
-
-                {record.tags && (
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    {record.tags.split(',').map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-mono text-slate-400 bg-space-950 px-2 py-0.5 rounded border border-slate-800"
-                      >
-                        #{tag.trim()}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Card Footer: Metadata and Action Buttons */}
-              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
-                <div className="font-mono text-[11px]">
-                  {record.author ? `By ${record.author} • ` : ''}
-                  {new Date(record.collected_at).toLocaleDateString()}
-                </div>
-
-                <div className="flex items-center space-x-1.5">
-                  <button
-                    onClick={() => handleAskAI(record)}
-                    className="p-1.5 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-lg transition-colors cursor-pointer"
-                    title="Synthesize with AI Assistant"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    onClick={() => handleCopyLink(record)}
-                    className="p-1.5 text-slate-400 hover:text-sky-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
-                    title="Copy Citation Link"
-                  >
-                    {copiedId === record.id ? (
-                      <Check className="w-4 h-4 text-emerald-400" />
-                    ) : (
-                      <Share2 className="w-4 h-4" />
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => toggleBookmarkMutation.mutate(record.id)}
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                      record.is_bookmarked
-                        ? 'text-sky-400 bg-sky-500/10'
-                        : 'text-slate-400 hover:text-sky-400 hover:bg-slate-800'
-                    }`}
-                    title={record.is_bookmarked ? 'Remove Bookmark' : 'Bookmark Discovery'}
-                  >
-                    <Bookmark className="w-4 h-4" fill={record.is_bookmarked ? 'currentColor' : 'none'} />
-                  </button>
-
+                  {/* Title */}
                   <a
                     href={record.original_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 text-slate-400 hover:text-sky-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
-                    title="Open Primary Source"
+                    className="text-sm font-semibold text-slate-100 hover:text-emerald-300 transition-colors block leading-snug line-clamp-2"
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    {record.title}
                   </a>
+
+                  {/* Description */}
+                  {record.description && (
+                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                      {record.description}
+                    </p>
+                  )}
+
+                  {/* Tags */}
+                  {record.tags && (
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {record.tags.split(',').slice(0, 4).map((t, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[9px] font-mono text-slate-500 bg-[#06090E] px-1.5 py-0.5 rounded border border-slate-800/80"
+                        >
+                          #{t.trim()}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer Controls */}
+                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <div className="text-[10px] font-mono text-slate-500 truncate mr-2">
+                    {new Date(record.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {record.source_name || record.source_type}
+                  </div>
+
+                  <div className="flex items-center space-x-1.5 flex-shrink-0">
+                    <button
+                      onClick={() => handleAskAI(record)}
+                      className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-[#121824] rounded border border-slate-800 transition-colors"
+                      title="AI Deep Summary"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      onClick={() => toggleBookmarkMutation.mutate(record.id)}
+                      className={`p-1.5 rounded border transition-colors ${
+                        record.is_bookmarked
+                          ? 'text-amber-400 bg-amber-500/10 border-amber-500/30'
+                          : 'text-slate-400 hover:text-white hover:bg-[#121824] border-slate-800'
+                      }`}
+                      title={record.is_bookmarked ? 'Bookmarked' : 'Add Bookmark'}
+                    >
+                      <Bookmark className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      onClick={() => handleCopyLink(record)}
+                      className="p-1.5 text-slate-400 hover:text-white hover:bg-[#121824] rounded border border-slate-800 transition-colors"
+                      title="Copy URL"
+                    >
+                      {copiedId === record.id ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <Share2 className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+
+                    <a
+                      href={record.original_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-[#121824] rounded border border-slate-800 transition-colors"
+                      title="Open Source"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {/* AI Synthesis Modal */}
+      {/* AI Intelligence Modal */}
       {aiModalRecord && (
         <Modal
           isOpen={!!aiModalRecord}
           onClose={() => setAiModalRecord(null)}
-          title="AI Synthesis & Explainer"
-          subtitle={`Grounded on: ${aiModalRecord.title}`}
-          maxWidth="lg"
+          title={`[AI SYNTHESIS] ${aiModalRecord.title}`}
         >
-          <div className="space-y-4">
-            <div className="p-3 bg-space-900 border border-slate-800 rounded-lg text-xs space-y-1">
-              <span className="font-mono text-sky-400 font-semibold block uppercase">
-                Primary Source Grounding
+          <div className="space-y-4 text-xs font-mono">
+            <div className="flex items-center space-x-2">
+              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                {aiModalRecord.category}
               </span>
-              <a
-                href={aiModalRecord.original_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-slate-300 hover:text-sky-300 flex items-center space-x-1"
-              >
-                <span className="truncate">{aiModalRecord.title}</span>
-                <ExternalLink className="w-3 h-3 flex-shrink-0" />
-              </a>
+              <span className="text-slate-500">Source: {aiModalRecord.original_url}</span>
             </div>
 
-            {isAiLoading ? (
-              <div className="p-6 text-center text-xs font-mono text-slate-400 animate-pulse">
-                Synthesizing record findings through local intelligence engine...
-              </div>
-            ) : (
-              <div className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl text-slate-200 text-sm leading-relaxed whitespace-pre-wrap">
-                {aiAnswer}
-              </div>
-            )}
+            <div className="p-3.5 rounded-lg bg-[#06090E] border border-slate-800 leading-relaxed text-slate-200 whitespace-pre-wrap">
+              {isAiLoading ? (
+                <div className="flex items-center space-x-2 text-emerald-400 animate-pulse">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Synthesizing intelligence from primary source text...</span>
+                </div>
+              ) : (
+                aiAnswer
+              )}
+            </div>
 
             <div className="flex justify-end pt-2">
               <Button variant="secondary" size="sm" onClick={() => setAiModalRecord(null)}>
-                Close Dossier
+                Close
               </Button>
             </div>
           </div>
@@ -372,4 +404,3 @@ export const DiscoverPage: React.FC = () => {
     </div>
   );
 };
-

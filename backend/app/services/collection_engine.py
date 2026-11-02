@@ -235,11 +235,60 @@ async def fast_sync_all_active_sources(db: Session) -> Dict[str, Any]:
                 "duplicates_skipped": res.duplicates_detected
             })
 
+    pruned_count = prune_rolling_records(db, max_age_hours=48, max_total_records=1500)
+
     return {
         "status": "success",
         "synced_sources_count": len(sources),
         "total_new_records_saved": total_saved,
+        "pruned_stale_records": pruned_count,
         "details": summary
     }
+
+def prune_rolling_records(db: Session, max_age_hours: int = 48, max_total_records: int = 1500) -> int:
+    """
+    Dynamic Rolling Retention Policy:
+    Preserves all pinned research evidence, while pruning stale records older than max_age_hours
+    or beyond max_total_records to keep SQLite memory and disk footprint <15MB on free-tier containers.
+    """
+    from datetime import timedelta
+    from backend.app.models.research import ResearchEvidence
+    
+    try:
+        # 1. Protect all records saved as research evidence
+        pinned_ids = [e.record_id for e in db.query(ResearchEvidence.record_id).all() if e.record_id]
+        
+        # 2. Prune records older than max_age_hours that are not pinned
+        cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
+        query = db.query(CollectedRecord).filter(
+            CollectedRecord.collected_at < cutoff
+        )
+        if pinned_ids:
+            query = query.filter(~CollectedRecord.id.in_(pinned_ids))
+        deleted_count = query.delete(synchronize_session=False)
+
+        # 3. If total records still exceed max_total_records, delete oldest unpinned records
+        total_count = db.query(CollectedRecord).count()
+        if total_count > max_total_records:
+            excess = total_count - max_total_records
+            oldest_records = (
+                db.query(CollectedRecord.id)
+                .filter(~CollectedRecord.id.in_(pinned_ids) if pinned_ids else True)
+                .order_by(CollectedRecord.collected_at.asc())
+                .limit(excess)
+                .all()
+            )
+            oldest_ids = [r[0] for r in oldest_records]
+            if oldest_ids:
+                db.query(CollectedRecord).filter(CollectedRecord.id.in_(oldest_ids)).delete(synchronize_session=False)
+                deleted_count += len(oldest_ids)
+
+        db.commit()
+        return deleted_count
+    except Exception as e:
+        logger.warning(f"Error during rolling record pruning: {e}")
+        db.rollback()
+        return 0
+
 
 

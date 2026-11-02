@@ -33,7 +33,7 @@ async def test_healthcheck(async_client):
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
-    assert data["service"] == "Scoutboard"
+    assert data["service"] == "Tools Market Live"
 
 @pytest.mark.asyncio
 async def test_auth_login_and_me(async_client):

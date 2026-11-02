@@ -138,14 +138,14 @@ export const OverviewDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <NavLink
           to="/gaps"
-          className="antigravity-card p-4 rounded-xl border-rose-500/30 bg-rose-950/10 hover:border-rose-500/60 transition-all group flex flex-col justify-between"
+          className="bg-[#090D14] p-4 rounded-xl border border-rose-500/30 hover:border-rose-400 transition-all group flex flex-col justify-between"
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                VENTURE OPPORTUNITY
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/30">
+                [VENTURE GAP]
               </span>
-              <span className="text-xs text-rose-400 font-mono font-semibold">96/100 Index</span>
+              <span className="text-xs text-rose-400 font-mono font-semibold">96/100 INDEX</span>
             </div>
             <h3 className="text-sm font-bold text-white group-hover:text-rose-200 transition-colors">
               Dead Startup Graveyard & Voids
@@ -154,56 +154,56 @@ export const OverviewDashboard: React.FC = () => {
               Analyze failed & sunset products (Mint, Skiff, Sunrise, Artifact) to capture stranded customers and market share.
             </p>
           </div>
-          <div className="pt-3 mt-2 border-t border-rose-500/20 flex items-center justify-between text-xs font-mono text-rose-300">
-            <span>Explore Blueprints</span>
+          <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-rose-300">
+            <span>EXPLORE BLUEPRINTS</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </NavLink>
 
         <NavLink
           to="/tools?tab=tool-gatherer"
-          className="antigravity-card p-4 rounded-xl border-purple-500/30 bg-purple-950/10 hover:border-purple-500/60 transition-all group flex flex-col justify-between"
+          className="bg-[#090D14] p-4 rounded-xl border border-emerald-500/30 hover:border-emerald-400 transition-all group flex flex-col justify-between"
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">
-                TOOL HUNTER
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                [TOOL HARVESTER]
               </span>
-              <span className="text-xs text-purple-400 font-mono font-semibold">Auto-Enriching</span>
+              <span className="text-xs text-emerald-400 font-mono font-semibold">AUTO-ENRICHING</span>
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">
+            <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors">
               Tool Gathering & Best Tools Hub
             </h3>
             <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
               Harvest any GitHub repository or AI model stack. Track live stars, forks, license types, and curate top tools.
             </p>
           </div>
-          <div className="pt-3 mt-2 border-t border-purple-500/20 flex items-center justify-between text-xs font-mono text-purple-300">
-            <span>Gather New Tool</span>
+          <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-emerald-300">
+            <span>GATHER NEW TOOL</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </NavLink>
 
         <NavLink
           to="/tools?tab=batch-scraper"
-          className="antigravity-card p-4 rounded-xl border-amber-500/30 bg-amber-950/10 hover:border-amber-500/60 transition-all group flex flex-col justify-between"
+          className="bg-[#090D14] p-4 rounded-xl border border-sky-500/30 hover:border-sky-400 transition-all group flex flex-col justify-between"
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                FAST CRAWLER
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
+                [FAST CRAWLER]
               </span>
-              <span className="text-xs text-amber-400 font-mono font-semibold">10x Parallel</span>
+              <span className="text-xs text-sky-400 font-mono font-semibold">10x PARALLEL</span>
             </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-amber-200 transition-colors">
+            <h3 className="text-sm font-bold text-white group-hover:text-sky-200 transition-colors">
               High-Speed Web Batch Scraper
             </h3>
             <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
               Paste up to 20 URLs and scrape concurrently with async worker pooling, SSRF safeguards, and DOM cleaning.
             </p>
           </div>
-          <div className="pt-3 mt-2 border-t border-amber-500/20 flex items-center justify-between text-xs font-mono text-amber-300">
-            <span>Launch Batch Scraper</span>
+          <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-sky-300">
+            <span>LAUNCH BATCH CRAWLER</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </NavLink>
