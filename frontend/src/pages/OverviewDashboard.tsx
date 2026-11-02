@@ -2,22 +2,22 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 import {
-  Layers,
-  Radio,
-  FileText,
-  TrendingUp,
-  AlertTriangle,
+  Compass,
   ArrowRight,
-  Database,
+  TrendingUp,
+  Cpu,
+  Layers,
   Sparkles,
+  ExternalLink,
+  Bookmark,
   RefreshCw,
   Plus,
-  Compass,
-  CheckCircle,
+  Flame,
+  Radio,
+  FileText
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useUIStore } from '../store';
-import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { LoadingSkeleton } from '../components/ui/LoadingSkeleton';
@@ -32,7 +32,7 @@ export const OverviewDashboard: React.FC = () => {
 
   const { data: recentRecords, isLoading: recordsLoading } = useQuery({
     queryKey: ['recent-records'],
-    queryFn: () => api.getRecords({ limit: 6, sort_by: 'recent' }),
+    queryFn: () => api.getRecords({ limit: 8, sort_by: 'recent' }),
   });
 
   const { data: sources } = useQuery({
@@ -45,33 +45,51 @@ export const OverviewDashboard: React.FC = () => {
     queryFn: () => api.getGaps(),
   });
 
+  const { data: researchProjects } = useQuery({
+    queryKey: ['research-projects-overview'],
+    queryFn: () => api.getProjects(),
+  });
+
+  const trendingTopics = [
+    { tag: 'Local LLMs & Weights', count: 34, change: '+18%' },
+    { tag: 'Inference Acceleration', count: 28, change: '+24%' },
+    { tag: 'Local-First SQLite & CRDTs', count: 19, change: '+12%' },
+    { tag: 'Web Scraping & DOM Parsers', count: 16, change: '+9%' },
+    { tag: 'Zero-Knowledge Sovereign Workspace', count: 12, change: '+31%' },
+  ];
+
   return (
-    <div className="space-y-8">
-      {/* Header with Quick Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-800/80">
+    <div className="space-y-6">
+      {/* Top Header - Editorial & Linear Style */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-zinc-800/80">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center space-x-3">
-            <span>Tools Market Live</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Real-time multi-source data collection, verification, tools catalog, and market intelligence node.
+          <div className="flex items-center space-x-2">
+            <h1 className="text-lg font-semibold tracking-tight text-white">
+              Intelligence Overview
+            </h1>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-[11px] font-mono text-zinc-500 uppercase">
+              Global Feed Active
+            </span>
+          </div>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Real-time multi-source crawler stream across Reddit, Hugging Face, Tech News, GitHub & HN.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2.5">
+        <div className="flex items-center space-x-2">
           <Button
             variant="secondary"
-            size="sm"
-            leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+            size="xs"
+            leftIcon={<RefreshCw className="w-3 h-3 text-zinc-400" />}
             onClick={() => refetchMetrics()}
           >
             Refresh
           </Button>
           <Button
             variant="primary"
-            size="sm"
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
+            size="xs"
+            leftIcon={<Plus className="w-3 h-3" />}
             onClick={() => setActiveQuickAction('source')}
           >
             Add Source
@@ -79,282 +97,270 @@ export const OverviewDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* KPI Metrics Cards */}
-      {metricsLoading ? (
-        <LoadingSkeleton rows={2} />
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <Card isFloating className="p-4 border-slate-800/80">
-            <span className="text-[11px] font-mono text-slate-400 block mb-1">TOTAL RECORDS</span>
-            <span className="text-2xl font-bold font-mono text-white tracking-tight">
-              {metrics?.total_records.toLocaleString() ?? 0}
-            </span>
-            <span className="text-[10px] text-emerald-400 block mt-1">Verifiable Evidence</span>
-          </Card>
-
-          <Card isFloating className="p-4 border-slate-800/80">
-            <span className="text-[11px] font-mono text-slate-400 block mb-1">ACTIVE SOURCES</span>
-            <span className="text-2xl font-bold font-mono text-sky-400 tracking-tight">
-              {metrics?.active_sources ?? 0}
-            </span>
-            <span className="text-[10px] text-slate-500 block mt-1">RSS, GitHub, HN</span>
-          </Card>
-
-          <Card isFloating className="p-4 border-slate-800/80">
-            <span className="text-[11px] font-mono text-slate-400 block mb-1">COLLECTION JOBS</span>
-            <span className="text-2xl font-bold font-mono text-white tracking-tight">
-              {metrics?.total_jobs ?? 0}
-            </span>
-            <span className="text-[10px] text-slate-500 block mt-1">12-Stage Lifecycle</span>
-          </Card>
-
-          <Card isFloating className="p-4 border-slate-800/80">
-            <span className="text-[11px] font-mono text-slate-400 block mb-1">SUCCESS RATE</span>
-            <span className="text-2xl font-bold font-mono text-emerald-400 tracking-tight">
-              {metrics?.collection_success_rate ?? 100}%
-            </span>
-            <span className="text-[10px] text-slate-500 block mt-1">Health Metric</span>
-          </Card>
-
-          <Card isFloating className="p-4 border-slate-800/80">
-            <span className="text-[11px] font-mono text-slate-400 block mb-1">DUPLICATES BLOCKED</span>
-            <span className="text-2xl font-bold font-mono text-amber-400 tracking-tight">
-              {metrics?.duplicate_count ?? 0}
-            </span>
-            <span className="text-[10px] text-slate-500 block mt-1">SHA-256 Fingerprint</span>
-          </Card>
-
-          <Card isFloating className="p-4 border-slate-800/80">
-            <span className="text-[11px] font-mono text-slate-400 block mb-1">INTELLIGENCE GAPS</span>
-            <span className="text-2xl font-bold font-mono text-purple-400 tracking-tight">
-              {metrics?.gaps_count ?? 0}
-            </span>
-            <span className="text-[10px] text-purple-300 block mt-1">Opportunities</span>
-          </Card>
+      {/* Information-Dense Telemetry Strip (Linear/Bloomberg style, no giant cards) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 border border-zinc-800 rounded-lg bg-[#0E0E12] overflow-hidden text-xs">
+        <div className="p-3 space-y-0.5">
+          <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider block">Indexed Intel</span>
+          <span className="text-base font-semibold font-mono text-white tabular-nums block">
+            {metrics?.total_records?.toLocaleString() ?? 0}
+          </span>
+          <span className="text-[10px] text-zinc-500 block">Verified records</span>
         </div>
-      )}
 
-      {/* Intelligence & Strategic Action Matrix */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <NavLink
-          to="/gaps"
-          className="bg-[#090D14] p-4 rounded-xl border border-rose-500/30 hover:border-rose-400 transition-all group flex flex-col justify-between"
-        >
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/30">
-                [VENTURE GAP]
-              </span>
-              <span className="text-xs text-rose-400 font-mono font-semibold">96/100 INDEX</span>
-            </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-rose-200 transition-colors">
-              Dead Startup Graveyard & Voids
-            </h3>
-            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-              Analyze failed & sunset products (Mint, Skiff, Sunrise, Artifact) to capture stranded customers and market share.
-            </p>
-          </div>
-          <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-rose-300">
-            <span>EXPLORE BLUEPRINTS</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </NavLink>
+        <div className="p-3 space-y-0.5">
+          <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider block">Active Feeds</span>
+          <span className="text-base font-semibold font-mono text-white tabular-nums block">
+            {metrics?.active_sources ?? 0}
+          </span>
+          <span className="text-[10px] text-zinc-500 block">Streaming / Polling</span>
+        </div>
 
-        <NavLink
-          to="/tools?tab=tool-gatherer"
-          className="bg-[#090D14] p-4 rounded-xl border border-emerald-500/30 hover:border-emerald-400 transition-all group flex flex-col justify-between"
-        >
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                [TOOL HARVESTER]
-              </span>
-              <span className="text-xs text-emerald-400 font-mono font-semibold">AUTO-ENRICHING</span>
-            </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors">
-              Tool Gathering & Best Tools Hub
-            </h3>
-            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-              Harvest any GitHub repository or AI model stack. Track live stars, forks, license types, and curate top tools.
-            </p>
-          </div>
-          <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-emerald-300">
-            <span>GATHER NEW TOOL</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </NavLink>
+        <div className="p-3 space-y-0.5">
+          <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider block">Startup Voids</span>
+          <span className="text-base font-semibold font-mono text-rose-300 tabular-nums block">
+            {gaps?.length ?? 0}
+          </span>
+          <span className="text-[10px] text-zinc-500 block">Uncovered markets</span>
+        </div>
 
-        <NavLink
-          to="/tools?tab=batch-scraper"
-          className="bg-[#090D14] p-4 rounded-xl border border-sky-500/30 hover:border-sky-400 transition-all group flex flex-col justify-between"
-        >
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
-                [FAST CRAWLER]
-              </span>
-              <span className="text-xs text-sky-400 font-mono font-semibold">10x PARALLEL</span>
-            </div>
-            <h3 className="text-sm font-bold text-white group-hover:text-sky-200 transition-colors">
-              High-Speed Web Batch Scraper
-            </h3>
-            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-              Paste up to 20 URLs and scrape concurrently with async worker pooling, SSRF safeguards, and DOM cleaning.
-            </p>
-          </div>
-          <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-sky-300">
-            <span>LAUNCH BATCH CRAWLER</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </NavLink>
+        <div className="p-3 space-y-0.5">
+          <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider block">Pipeline Success</span>
+          <span className="text-base font-semibold font-mono text-emerald-400 tabular-nums block">
+            {metrics?.collection_success_rate ?? 100}%
+          </span>
+          <span className="text-[10px] text-zinc-500 block">12-stage engine</span>
+        </div>
+
+        <div className="p-3 space-y-0.5">
+          <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider block">Dossiers Staged</span>
+          <span className="text-base font-semibold font-mono text-indigo-300 tabular-nums block">
+            {researchProjects?.length ?? 0}
+          </span>
+          <span className="text-[10px] text-zinc-500 block">Research notes</span>
+        </div>
+
+        <div className="p-3 space-y-0.5">
+          <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider block">Retention Cap</span>
+          <span className="text-base font-semibold font-mono text-zinc-300 tabular-nums block">
+            Rolling 48h
+          </span>
+          <span className="text-[10px] text-zinc-500 block">Low RAM mode</span>
+        </div>
       </div>
 
-      {/* Main Grid: Discoveries Feed & System Status */}
+      {/* Main Editorial Workspace Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Recent Intelligence Discoveries */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Compass className="w-5 h-5 text-sky-400" />
-              <h2 className="text-lg font-semibold text-white">Recent Discoveries</h2>
+        {/* Left Column (2/3): Latest Verified Discoveries & Startup Voids */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Breaking Discoveries - Editorial Row Layout */}
+          <div className="border border-zinc-800 rounded-lg bg-[#0E0E12] overflow-hidden">
+            <div className="px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-300 font-mono">
+                  Recent Intelligence Discoveries
+                </h2>
+              </div>
+              <NavLink
+                to="/discover"
+                className="text-[11px] font-mono text-zinc-400 hover:text-white flex items-center space-x-1"
+              >
+                <span>View all stream</span>
+                <ArrowRight className="w-3 h-3" />
+              </NavLink>
             </div>
-            <NavLink
-              to="/discover"
-              className="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center space-x-1"
-            >
-              <span>Explore all records</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </NavLink>
+
+            {recordsLoading ? (
+              <div className="p-4"><LoadingSkeleton rows={4} /></div>
+            ) : (
+              <div className="divide-y divide-zinc-800/80">
+                {recentRecords?.map((record) => (
+                  <div
+                    key={record.id}
+                    className="p-3.5 hover:bg-zinc-850/50 transition-colors flex items-start justify-between gap-3 group"
+                  >
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <div className="flex items-center space-x-2 flex-wrap text-[11px] font-mono">
+                        <span className="px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300 font-medium">
+                          {(record.source_type || 'web').toUpperCase()}
+                        </span>
+                        <span className="text-zinc-500">•</span>
+                        <span className="text-zinc-400">{record.category}</span>
+                        <span className="text-zinc-600">•</span>
+                        <span className="text-zinc-500">
+                          {new Date(record.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+
+                      <a
+                        href={record.original_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-medium text-zinc-100 hover:text-indigo-300 transition-colors block line-clamp-1"
+                      >
+                        {record.title}
+                      </a>
+
+                      {record.description && (
+                        <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">
+                          {record.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center space-x-1 flex-shrink-0 pt-0.5">
+                      <span className="text-[10px] font-mono text-zinc-400 bg-zinc-850 px-1.5 py-0.5 rounded border border-zinc-750 tabular-nums">
+                        QS: {record.quality_score}
+                      </span>
+                      <a
+                        href={record.original_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1 text-zinc-500 hover:text-zinc-200"
+                        title="Open Source URL"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {recordsLoading ? (
-            <LoadingSkeleton rows={4} />
-          ) : (
-            <div className="space-y-3">
-              {recentRecords?.map((record) => (
-                <div
-                  key={record.id}
-                  className="antigravity-card rounded-xl p-4 flex flex-col sm:flex-row sm:items-start justify-between gap-3 group"
-                >
-                  <div className="space-y-1.5 flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant="cyan">{record.category}</Badge>
-                      {record.source_name && (
-                        <span className="text-xs font-mono text-slate-400">
-                          via {record.source_name}
-                        </span>
-                      )}
-                      <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                        Score {record.quality_score}
-                      </span>
-                    </div>
-
-                    <a
-                      href={record.original_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-semibold text-slate-100 hover:text-sky-300 transition-colors block line-clamp-1"
-                    >
-                      {record.title}
-                    </a>
-
-                    {record.description && (
-                      <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                        {record.description}
-                      </p>
-                    )}
-
-                    <div className="flex items-center space-x-4 text-[11px] font-mono text-slate-500 pt-1">
-                      {record.author && <span>By {record.author}</span>}
-                      <span>{new Date(record.collected_at).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2 flex-shrink-0 self-end sm:self-center">
-                    <NavLink
-                      to={`/discover?q=${encodeURIComponent(record.title)}`}
-                      className="p-1.5 text-slate-400 hover:text-sky-400 hover:bg-slate-800 rounded-lg transition-colors"
-                      title="Inspect Record"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </NavLink>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Right Column: Collection Sources & Gap Highlights */}
-        <div className="space-y-6">
-          {/* Active Connected Sources */}
-          <Card title="Connected Sources" subtitle="Monitored streaming & polling feeds">
-            <div className="space-y-2.5 divide-y divide-slate-800/80">
-              {sources?.slice(0, 4).map((source) => (
-                <div key={source.id} className="pt-2.5 first:pt-0 flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-semibold text-slate-200 block truncate max-w-[180px]">
-                      {source.name}
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-400 uppercase">
-                      {source.type} • Every {source.fetch_interval_minutes}m
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-mono font-bold text-sky-400 block">
-                      {source.records_count}
-                    </span>
-                    <Badge variant={source.status === 'active' ? 'emerald' : 'amber'} size="sm" dot>
-                      {source.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="pt-4 border-t border-slate-800/80 mt-4">
-              <NavLink
-                to="/sources"
-                className="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center justify-center space-x-1"
-              >
-                <span>Manage all sources</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </NavLink>
-            </div>
-          </Card>
-
-          {/* Intelligence Gap Board Highlights */}
-          <Card
-            title="Intelligence Gaps"
-            subtitle="Automated pattern & developer demand detection"
-            className="border-purple-500/20 shadow-purple-500/5"
-          >
-            <div className="space-y-3">
-              {gaps?.slice(0, 2).map((gap) => (
-                <div key={gap.id} className="p-3 rounded-lg bg-purple-500/5 border border-purple-500/20 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="purple" size="sm">
-                      {gap.priority.toUpperCase()} PRIORITY
-                    </Badge>
-                    <span className="text-[10px] font-mono text-slate-400">{gap.status}</span>
-                  </div>
-                  <h4 className="text-xs font-semibold text-slate-200 line-clamp-1">{gap.title}</h4>
-                  <p className="text-[11px] text-slate-400 line-clamp-2">{gap.description}</p>
-                </div>
-              ))}
-            </div>
-            <div className="pt-4 border-t border-slate-800/80 mt-4">
+          {/* Startup Radar & Market Opportunities Preview */}
+          <div className="border border-zinc-800 rounded-lg bg-[#0E0E12] overflow-hidden">
+            <div className="px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Compass className="w-3.5 h-3.5 text-rose-400" />
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-300 font-mono">
+                  Emerging Startup Opportunities & Market Voids
+                </h2>
+              </div>
               <NavLink
                 to="/gaps"
-                className="text-xs text-purple-400 hover:text-purple-300 font-medium flex items-center justify-center space-x-1"
+                className="text-[11px] font-mono text-rose-300 hover:text-rose-200 flex items-center space-x-1"
               >
-                <span>Open Market Gaps & Radar</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Full Radar ({gaps?.length || 0})</span>
+                <ArrowRight className="w-3 h-3" />
               </NavLink>
             </div>
-          </Card>
+
+            <div className="divide-y divide-zinc-800/80">
+              {gaps?.slice(0, 3).map((gap) => (
+                <div key={gap.id} className="p-3.5 hover:bg-zinc-850/50 transition-colors space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20 font-medium">
+                      {gap.category}
+                    </span>
+                    <span className="text-[11px] font-mono text-emerald-400 font-semibold tabular-nums">
+                      95/100 OPPORTUNITY
+                    </span>
+                  </div>
+                  <h3 className="text-xs font-semibold text-zinc-100">
+                    {gap.title}
+                  </h3>
+                  <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">
+                    {gap.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column (1/3): Trending Topics & Active Source Registry */}
+        <div className="space-y-6">
+          {/* Trending Topics & Velocity */}
+          <div className="border border-zinc-800 rounded-lg bg-[#0E0E12] overflow-hidden">
+            <div className="px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300 font-mono flex items-center space-x-1.5">
+                <TrendingUp className="w-3.5 h-3.5 text-zinc-400" />
+                <span>Trending Research Vectors</span>
+              </span>
+            </div>
+
+            <div className="p-3 divide-y divide-zinc-800/60">
+              {trendingTopics.map((topic, idx) => (
+                <div key={idx} className="py-2 first:pt-0 last:pb-0 flex items-center justify-between text-xs">
+                  <NavLink
+                    to={`/discover?q=${encodeURIComponent(topic.tag)}`}
+                    className="text-zinc-300 hover:text-white truncate pr-2 font-medium"
+                  >
+                    {topic.tag}
+                  </NavLink>
+                  <div className="flex items-center space-x-2 text-right flex-shrink-0">
+                    <span className="font-mono text-zinc-500 tabular-nums">{topic.count}</span>
+                    <span className="text-[10px] font-mono text-emerald-400 font-semibold bg-emerald-500/10 px-1 py-0.2 rounded">
+                      {topic.change}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Connected Primary Data Sources */}
+          <div className="border border-zinc-800 rounded-lg bg-[#0E0E12] overflow-hidden">
+            <div className="px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300 font-mono flex items-center space-x-1.5">
+                <Radio className="w-3.5 h-3.5 text-zinc-400" />
+                <span>Active Data Sources</span>
+              </span>
+              <NavLink
+                to="/sources"
+                className="text-[11px] font-mono text-zinc-400 hover:text-white"
+              >
+                Manage
+              </NavLink>
+            </div>
+
+            <div className="divide-y divide-zinc-800/80">
+              {sources?.slice(0, 5).map((src) => (
+                <div key={src.id} className="p-3 flex items-center justify-between text-xs">
+                  <div className="truncate pr-2">
+                    <span className="font-medium text-zinc-200 block truncate">{src.name}</span>
+                    <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                      {src.type} • Every {src.fetch_interval_minutes}m
+                    </span>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <span className="text-xs font-mono font-medium text-zinc-300 block tabular-nums">
+                      {src.records_count}
+                    </span>
+                    <span className="inline-flex items-center space-x-1 text-[10px] font-mono text-emerald-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <span>LIVE</span>
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Dossiers Staged */}
+          <div className="border border-zinc-800 rounded-lg bg-[#0E0E12] p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300 font-mono flex items-center space-x-1.5">
+                <FileText className="w-3.5 h-3.5 text-zinc-400" />
+                <span>Research Studio</span>
+              </span>
+              <NavLink to="/research" className="text-[11px] font-mono text-zinc-400 hover:text-white">
+                Open Studio
+              </NavLink>
+            </div>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Compile notes, lock evidence snippets, and generate exportable intelligence briefs in Markdown or HTML.
+            </p>
+            <NavLink
+              to="/research"
+              className="inline-flex items-center justify-center w-full py-1.5 rounded bg-zinc-850 hover:bg-zinc-800 text-xs font-medium text-zinc-200 border border-zinc-750 transition-colors"
+            >
+              Start New Dossier
+            </NavLink>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-

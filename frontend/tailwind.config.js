@@ -8,34 +8,56 @@ export default {
   theme: {
     extend: {
       colors: {
-        space: {
-          950: '#06090F',
-          900: '#090D16',
-          800: '#0F172A',
-          700: '#1E293B',
-          600: '#334155',
-          500: '#475569',
+        surface: {
+          0: '#09090B', // Root canvas (Zinc 950)
+          1: '#121215', // Sidebar, elevated panels
+          2: '#18181B', // Cards, inputs, table rows
+          3: '#222227', // Hover states, dropdowns
         },
-        intel: {
-          cyan: '#38BDF8',
-          blue: '#2563EB',
+        border: {
+          subtle: '#27272A', // Primary 1px divider
+          strong: '#3F3F46', // Highlighted or focused border
+          active: '#52525B',
+        },
+        accent: {
+          DEFAULT: '#6366F1', // Refined Linear Indigo
+          hover: '#4F46E5',
+          subtle: 'rgba(99, 102, 241, 0.1)',
+        },
+        signal: {
           emerald: '#10B981',
           amber: '#F59E0B',
           rose: '#EF4444',
-          purple: '#A855F7',
+          sky: '#38BDF8',
+          zinc: '#71717A',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+        sans: [
+          'Inter',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'system-ui',
+          'Segoe UI',
+          'Roboto',
+          'sans-serif'
+        ],
+        mono: [
+          'Fira Code',
+          'JetBrains Mono',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'monospace'
+        ],
       },
       boxShadow: {
-        'antigravity': '0 12px 32px -4px rgba(0, 0, 0, 0.4), 0 4px 12px -2px rgba(56, 189, 248, 0.08)',
-        'antigravity-hover': '0 20px 40px -6px rgba(0, 0, 0, 0.55), 0 8px 20px -3px rgba(56, 189, 248, 0.16)',
-        'glass-rim': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)',
+        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.4)',
+        'panel': '0 4px 12px 0 rgba(0, 0, 0, 0.3)',
+        'popover': '0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.4)',
       }
     },
   },
   plugins: [],
 }
-

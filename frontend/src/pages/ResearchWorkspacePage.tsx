@@ -113,16 +113,16 @@ export const ResearchWorkspacePage: React.FC = () => {
             <a
               href={`/api/v1/export/projects/${currentProject.id}/markdown`}
               download
-              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-space-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center px-2.5 py-1 rounded text-xs font-mono bg-zinc-900 hover:bg-zinc-850 text-zinc-300 border border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 mr-1.5 text-sky-400" />
+              <Download className="w-3.5 h-3.5 mr-1.5 text-zinc-400" />
               Export Dossier (.md)
             </a>
           )}
           <Button
             variant="primary"
-            size="sm"
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
+            size="xs"
+            leftIcon={<Plus className="w-3 h-3" />}
             onClick={() => setIsNewProjectModalOpen(true)}
           >
             New Project
@@ -134,7 +134,7 @@ export const ResearchWorkspacePage: React.FC = () => {
         <LoadingSkeleton rows={4} />
       ) : projects?.length === 0 ? (
         <EmptyState
-          icon={<FileText className="w-8 h-8" />}
+          icon={<FileText className="w-8 h-8 text-zinc-500" />}
           title="No Research Projects"
           description="Create your first structured research dossier to organize collected evidence, write technical notes, and formulate conclusions."
           actionLabel="Create Research Project"
@@ -144,8 +144,8 @@ export const ResearchWorkspacePage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Projects Sidebar */}
           <div className="space-y-3 lg:col-span-1">
-            <span className="text-xs font-mono uppercase text-slate-400 font-semibold block px-1">
-              Projects ({projects?.length})
+            <span className="text-[10px] font-mono uppercase text-zinc-500 font-semibold block px-1 tracking-wider">
+              PROJECTS ({projects?.length})
             </span>
             <div className="space-y-1.5">
               {projects?.map((proj) => {
@@ -154,21 +154,21 @@ export const ResearchWorkspacePage: React.FC = () => {
                   <div
                     key={proj.id}
                     onClick={() => setSelectedProjectId(proj.id)}
-                    className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+                    className={`p-3 rounded-lg border transition-colors cursor-pointer flex flex-col justify-between ${
                       isSelected
-                        ? 'bg-purple-500/10 border-purple-500/40 shadow-sm'
-                        : 'bg-space-800/80 border-slate-800 hover:border-slate-700'
+                        ? 'bg-zinc-850 text-white border-zinc-700 shadow-subtle'
+                        : 'bg-[#0E0E12] border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
                     }`}
                   >
                     <div className="space-y-1">
-                      <h4 className="text-xs font-semibold text-slate-100 line-clamp-1">
+                      <h4 className="text-xs font-semibold text-zinc-100 line-clamp-1">
                         {proj.title}
                       </h4>
-                      <p className="text-[11px] text-slate-400 line-clamp-2">
+                      <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">
                         {proj.description || 'No description provided.'}
                       </p>
                     </div>
-                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-slate-800/60 text-[10px] font-mono text-slate-500">
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-500">
                       <span>{proj.notes?.length || 0} notes • {proj.evidence?.length || 0} citations</span>
                       <span>{new Date(proj.updated_at).toLocaleDateString()}</span>
                     </div>

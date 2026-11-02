@@ -187,22 +187,26 @@ export const ToolsWorkspacePage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-zinc-800/80">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center space-x-2">
-            <Wrench className="w-6 h-6 text-sky-400" />
-            <span>Tools & Gathering Hub</span>
-          </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Active tool harvester, parallel web scraping laboratory, file ingestion, and AI evidence synthesis.
+          <div className="flex items-center space-x-2">
+            <h1 className="text-lg font-semibold tracking-tight text-white">
+              Tools & Crawler Workstation
+            </h1>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-850 text-zinc-400 border border-zinc-750">
+              OPERATIONAL HUB
+            </span>
+          </div>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Active repository harvester, parallel web scraping engine, file ingestion, and grounded AI synthesis.
           </p>
         </div>
       </div>
 
-      {/* Distinct Laboratory Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-2">
+      {/* Clean Linear Tabs */}
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-zinc-800 pb-2">
         {[
-          { id: 'tool-gatherer', label: 'Tool Gathering Station', icon: Search, badge: 'New' },
+          { id: 'tool-gatherer', label: 'Tool Gathering Station', icon: Search },
           { id: 'batch-scraper', label: 'Fast Batch Scraper', icon: Zap },
           { id: 'url-collector', label: 'Single URL Inspector', icon: Globe },
           { id: 'file-importer', label: 'CSV / JSON Ingestion', icon: Upload },
@@ -219,19 +223,14 @@ export const ToolsWorkspacePage: React.FC = () => {
                 params.set('tab', tab.id);
                 setSearchParams(params);
               }}
-              className={`flex items-center space-x-2 px-3.5 py-2 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
+              className={`flex items-center space-x-2 px-3 py-1.5 text-xs font-mono rounded transition-colors cursor-pointer ${
                 isActive
-                  ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm'
-                  : 'bg-space-800 text-slate-400 border border-slate-800 hover:border-slate-700'
+                  ? 'bg-zinc-800 text-white font-medium border border-zinc-700'
+                  : 'text-zinc-400 hover:text-white hover:bg-zinc-850 border border-transparent'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-3.5 h-3.5" />
               <span>{tab.label}</span>
-              {tab.badge && (
-                <span className="text-[9px] font-mono font-bold bg-purple-500/30 text-purple-200 px-1.5 py-0.2 rounded border border-purple-500/40">
-                  {tab.badge}
-                </span>
-              )}
             </button>
           );
         })}
@@ -241,17 +240,17 @@ export const ToolsWorkspacePage: React.FC = () => {
       {activeTab === 'tool-gatherer' && (
         <div className="space-y-6">
           {/* Harvester Input Card */}
-          <div className="antigravity-card p-5 rounded-2xl border-purple-500/30 bg-space-900/80 space-y-4">
+          <div className="p-4 rounded-lg border border-zinc-800 bg-[#0E0E12] space-y-3">
             <div>
               <div className="flex items-center space-x-2">
-                <Search className="w-4 h-4 text-purple-400" />
-                <h3 className="text-base font-bold text-white">Active Tool & Repository Harvester</h3>
-                <span className="text-[10px] font-mono text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
-                  Auto-Enriching
+                <Search className="w-4 h-4 text-zinc-300" />
+                <h3 className="text-sm font-semibold text-white">Repository & Tool Harvester</h3>
+                <span className="text-[10px] font-mono text-zinc-400 bg-zinc-850 px-1.5 py-0.2 rounded border border-zinc-750">
+                  AUTO-ENRICHING
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-1">
-                Enter any GitHub repository slug (e.g. <code className="text-sky-300">vllm-project/vllm</code>, <code className="text-sky-300">ollama/ollama</code>) or public product URL. Scoutboard automatically extracts stargazers, forks, tech stack, license, and catalogs it as indexed intelligence.
+              <p className="text-xs text-zinc-400 mt-1">
+                Enter any GitHub repo (e.g. <code className="text-zinc-300 font-mono">vllm-project/vllm</code>, <code className="text-zinc-300 font-mono">ollama/ollama</code>) or website URL. Scoutboard automatically extracts stars, language, license, and catalogs it.
               </p>
             </div>
 
@@ -261,70 +260,65 @@ export const ToolsWorkspacePage: React.FC = () => {
                 placeholder="e.g. astral-sh/uv or https://github.com/shadcn-ui/ui"
                 value={gatherInput}
                 onChange={(e) => setGatherInput(e.target.value)}
-                className="flex-1 bg-space-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 font-mono text-xs"
+                className="flex-1 bg-zinc-900 border border-zinc-800 rounded px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-600 font-mono"
               />
-              <Button variant="primary" size="md" type="submit" isLoading={gatherLoading} leftIcon={<Sparkles className="w-4 h-4" />}>
-                Gather & Catalog Tool
+              <Button variant="primary" size="xs" type="submit" isLoading={gatherLoading}>
+                Gather & Catalog
               </Button>
             </form>
 
             {gatherError && (
-              <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-400 text-xs flex items-center space-x-2">
+              <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded text-rose-300 text-xs flex items-center space-x-2 font-mono">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>{gatherError}</span>
               </div>
             )}
 
             {gatherResult && (
-              <div className="p-4 bg-purple-950/20 border border-purple-500/40 rounded-xl space-y-3">
+              <div className="p-3.5 bg-zinc-900 border border-zinc-800 rounded-lg space-y-2.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-400" />
-                    <span className="text-xs font-semibold text-emerald-300">
-                      Tool Cataloged Successfully {gatherResult.is_new ? '(New)' : '(Updated)'}
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-xs font-semibold text-zinc-200">
+                      Tool Cataloged {gatherResult.is_new ? '(New Record)' : '(Updated Record)'}
                     </span>
                   </div>
-                  <Badge variant="purple">{gatherResult.tool?.category}</Badge>
+                  <Badge variant="neutral">{gatherResult.tool?.category}</Badge>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3 bg-space-950/80 p-3 rounded-lg border border-slate-800 text-xs font-mono">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#0E0E12] p-2.5 rounded border border-zinc-800 text-xs font-mono">
                   <div>
-                    <span className="text-slate-500 block">TOOL NAME</span>
-                    <span className="text-white font-bold">{gatherResult.tool?.name}</span>
+                    <span className="text-zinc-500 text-[10px] block">TOOL</span>
+                    <span className="text-white font-medium">{gatherResult.tool?.name}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block">GITHUB STARS</span>
-                    <span className="text-amber-400 font-bold flex items-center space-x-1">
-                      <Star className="w-3 h-3 fill-amber-400" />
-                      <span>{gatherResult.tool?.stars?.toLocaleString()}</span>
+                    <span className="text-zinc-500 text-[10px] block">STARS</span>
+                    <span className="text-amber-400 font-semibold tabular-nums">
+                      {gatherResult.tool?.stars?.toLocaleString()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block">LANGUAGE / STACK</span>
-                    <span className="text-sky-300 font-bold">{gatherResult.tool?.language}</span>
+                    <span className="text-zinc-500 text-[10px] block">STACK</span>
+                    <span className="text-zinc-300 font-medium">{gatherResult.tool?.language}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block">LICENSE</span>
-                    <span className="text-emerald-400 font-bold">{gatherResult.tool?.license}</span>
+                    <span className="text-zinc-500 text-[10px] block">LICENSE</span>
+                    <span className="text-emerald-400 font-medium">{gatherResult.tool?.license}</span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed">{gatherResult.tool?.description}</p>
+                <p className="text-xs text-zinc-300 leading-relaxed">{gatherResult.tool?.description}</p>
               </div>
             )}
           </div>
 
           {/* Curated Best Tools Gallery */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-                  <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-                  <span>Curated High-Impact Tools Directory</span>
+                <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider font-mono">
+                  Curated Developer & AI Tools Directory
                 </h3>
-                <p className="text-xs text-slate-400">
-                  Pre-vetted industry benchmark tools across AI, scraping, databases, and developer infrastructure.
-                </p>
               </div>
 
               {/* Category Filter Pills */}
@@ -333,10 +327,10 @@ export const ToolsWorkspacePage: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => setGatherCategoryFilter(cat)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                    className={`px-2 py-0.5 rounded text-xs font-mono transition-colors cursor-pointer ${
                       gatherCategoryFilter === cat
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-space-900 text-slate-400 hover:text-white border border-slate-800'
+                        ? 'bg-zinc-800 text-white font-medium border border-zinc-700'
+                        : 'text-zinc-400 hover:text-white hover:bg-zinc-850'
                     }`}
                   >
                     {cat}
@@ -345,63 +339,55 @@ export const ToolsWorkspacePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {filteredCuratedTools.map((tool: any, idx: number) => (
                 <div
                   key={idx}
-                  className="antigravity-card p-4 rounded-xl border-slate-800/80 bg-space-900/60 flex flex-col justify-between hover:border-purple-500/40 transition-all space-y-3"
+                  className="p-3.5 rounded-lg border border-zinc-800 bg-[#0E0E12] flex flex-col justify-between hover:border-zinc-700 transition-colors space-y-2.5"
                 >
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
+                      <span className="text-[10px] font-mono text-zinc-400 bg-zinc-850 px-1.5 py-0.2 rounded border border-zinc-750">
                         {tool.category}
                       </span>
-                      <span className="text-xs font-mono font-bold text-amber-400 flex items-center space-x-1">
-                        <Star className="w-3 h-3 fill-amber-400" />
+                      <span className="text-xs font-mono font-semibold text-amber-400 flex items-center space-x-1 tabular-nums">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                         <span>{tool.stars.toLocaleString()}</span>
                       </span>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white flex items-center space-x-1.5">
-                      <span>{tool.name}</span>
-                      <span className="text-[10px] font-mono text-slate-400 font-normal">({tool.repo})</span>
+                    <h4 className="text-xs font-semibold text-white">
+                      {tool.name} <span className="font-normal font-mono text-[10px] text-zinc-500">({tool.repo})</span>
                     </h4>
 
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
                       {tool.description}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-slate-400">
-                      <span className="flex items-center space-x-1 text-slate-300">
-                        <Code2 className="w-3 h-3 text-purple-400" />
-                        <span>{tool.language}</span>
-                      </span>
-                      <span className="flex items-center space-x-1 text-emerald-400">
-                        <ShieldCheck className="w-3 h-3" />
-                        <span>{tool.license}</span>
-                      </span>
+                    <div className="flex items-center space-x-3 text-[10px] font-mono text-zinc-500 pt-1">
+                      <span>{tool.language}</span>
+                      <span>•</span>
+                      <span>{tool.license}</span>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                  <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between">
                     <a
                       href={tool.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[11px] font-mono text-slate-400 hover:text-white flex items-center space-x-1"
+                      className="text-[10px] font-mono text-zinc-500 hover:text-zinc-300 flex items-center space-x-1"
                     >
                       <span>Repository</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink className="w-2.5 h-2.5" />
                     </a>
 
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      leftIcon={<BookmarkPlus className="w-3.5 h-3.5 text-purple-400" />}
+                    <button
                       onClick={(e) => handleGatherTool(e as any, tool.repo)}
+                      className="text-[11px] font-mono text-zinc-300 hover:text-white px-2 py-0.5 rounded bg-zinc-850 hover:bg-zinc-800 border border-zinc-750 transition-colors cursor-pointer"
                     >
                       Gather Tool
-                    </Button>
+                    </button>
                   </div>
                 </div>
               ))}

@@ -4,74 +4,103 @@
 
 @layer base {
   :root {
-    --bg-base: #06090E;
-    --surface-1: #0B0F17;
-    --surface-2: #121824;
-    --border-subtle: #1C2433;
-    --phosphor-green: #00FF9D;
-    --cyber-cyan: #00F0FF;
-    --terminal-amber: #FFB800;
+    --bg-canvas: #09090B;
+    --bg-surface-1: #121215;
+    --bg-surface-2: #18181B;
+    --bg-surface-3: #222227;
+    --border-subtle: #27272A;
+    --border-strong: #3F3F46;
+    --text-primary: #FAFAFA;
+    --text-secondary: #A1A1AA;
+    --text-muted: #71717A;
+    --accent: #6366F1;
   }
 
   body {
-    background-color: var(--bg-base);
-    color: #E2E8F0;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Retro-Cool Cyber Terminal Cards (Flat, Sharp, No Mushy Gradients) */
-.glass-panel {
-  background: #0B0F17;
-  border: 1px solid #1C2433;
+/* Linear/Vercel Editorial Workspace Components */
+.panel {
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
 }
 
-.antigravity-card {
-  background: #0A0E17;
-  border: 1px solid #1B2332;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+.surface-card {
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 140ms ease, background-color 140ms ease;
 }
 
-.antigravity-card:hover {
-  transform: translateY(-1px);
-  border-color: #00FF9D;
-  box-shadow: 0 4px 20px rgba(0, 255, 157, 0.08);
+.surface-card:hover {
+  border-color: var(--border-strong);
+  background-color: var(--bg-surface-2);
 }
 
-.retro-terminal-border {
-  border: 1px solid #1E2838;
+/* Information Row Layout for Intelligence Feeds (Bloomberg/Linear style) */
+.intelligence-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: transparent;
+  transition: background-color 120ms ease;
 }
 
-.retro-tag {
+.intelligence-row:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Compact Monospace Metadata Pill */
+.meta-tag {
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface-2);
+  color: var(--text-secondary);
+}
+
+/* Keyboard Shortcut Badge (Raycast style) */
+.kbd-shortcut {
   font-family: 'Fira Code', monospace;
   font-size: 10px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background-color: var(--bg-surface-3);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
 }
 
-/* Subtle CRT Grid lines */
-.bg-retro-grid {
-  background-size: 24px 24px;
-  background-image: 
-    linear-gradient(to right, rgba(28, 36, 51, 0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(28, 36, 51, 0.25) 1px, transparent 1px);
-}
-
-/* Custom Scrollbar - Retro Monospace Feel */
+/* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #06090E;
+  background: var(--bg-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1C2433;
+  background: #27272A;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00FF9D;
+  background: #3F3F46;
+}
+
+/* Tabular figures for numerical precision */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Reduced Motion Safety */
@@ -81,8 +110,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .antigravity-card:hover {
-    transform: none !important;
   }
 }
