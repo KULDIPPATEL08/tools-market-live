@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  scoutboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scoutboard-platform
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DEBUG=False
+      - DATABASE_URL=sqlite:///./scoutboard.db
+      - SECRET_KEY=prod-secret-scoutboard-replace-in-cloud-deployment
+      - AI_PROVIDER=local
+      - ALLOW_PRIVATE_IPS=False
+    volumes:
+      - scoutboard_data:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  scoutboard_data:
+

@@ -99,3 +99,4 @@ async def sync_source_now(source_id: int, db: Session = Depends(get_db)):
 def get_source_jobs(source_id: int, limit: int = 10, db: Session = Depends(get_db)):
     jobs = db.query(CollectionJob).filter(CollectionJob.source_id == source_id).order_by(desc(CollectionJob.created_at)).limit(limit).all()
     return jobs
+

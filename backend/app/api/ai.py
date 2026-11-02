@@ -16,3 +16,4 @@ async def ask_assistant(req: AskAssistantRequest, db: Session = Depends(get_db))
         context_record_ids=req.context_record_ids
     )
     return result
+

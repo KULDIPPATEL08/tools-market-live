@@ -58,3 +58,4 @@ def is_safe_url(url: str) -> Tuple[bool, str]:
         return False, f"Error validating URL security: {e}"
 
     return True, ""
+

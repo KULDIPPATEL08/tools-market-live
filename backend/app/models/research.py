@@ -41,3 +41,4 @@ class ResearchEvidence(Base):
 
     project = relationship("ResearchProject", back_populates="evidence")
     record = relationship("CollectedRecord")
+

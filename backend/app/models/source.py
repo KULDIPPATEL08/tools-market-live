@@ -19,3 +19,4 @@ class Source(Base):
     config_json = Column(Text, default="{}")  # Extra config like headers, queries, credentials
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+

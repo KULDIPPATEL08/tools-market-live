@@ -16,3 +16,4 @@ class Gap(Base):
     related_tags = Column(String(512), default="")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+

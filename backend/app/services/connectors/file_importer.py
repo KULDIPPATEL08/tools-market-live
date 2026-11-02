@@ -117,3 +117,4 @@ def parse_json_data(file_content: str) -> Tuple[List[Dict[str, Any]], Dict[str, 
         "skipped_items": skipped
     }
     return records, summary
+

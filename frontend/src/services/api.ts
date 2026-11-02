@@ -81,6 +81,28 @@ export const api = {
   async retryJob(id: number) {
     return fetchJSON<CollectionJob>(`${BASE_URL}/collection/jobs/${id}/retry`, { method: 'POST' });
   },
+  async fastSyncAll() {
+    return fetchJSON<{
+      status: string;
+      synced_sources_count: number;
+      total_new_records_saved: number;
+      details: any[];
+    }>(`${BASE_URL}/collection/fast-sync-all`, { method: 'POST' });
+  },
+  async getLiveStream(limit: number = 20) {
+    return fetchJSON<CollectedRecord[]>(`${BASE_URL}/collection/live-stream?limit=${limit}`);
+  },
+  async scrapeBatch(urls: string[]) {
+    return fetchJSON<{
+      status: string;
+      scraped_count: number;
+      saved_count: number;
+      duplicates_skipped: number;
+    }>(`${BASE_URL}/collection/scrape-batch`, {
+      method: 'POST',
+      body: JSON.stringify(urls),
+    });
+  },
 
   // Records & Discovery
   async getRecords(params?: {

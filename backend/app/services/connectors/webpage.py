@@ -96,3 +96,4 @@ async def fetch_webpage(url: str) -> Dict[str, Any]:
             "canonical_url": str(resp.url)
         }
     }
+

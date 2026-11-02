@@ -67,3 +67,4 @@ def delete_gap(gap_id: int, db: Session = Depends(get_db)):
     db.delete(gap)
     db.commit()
     return {"message": "Gap deleted"}
+

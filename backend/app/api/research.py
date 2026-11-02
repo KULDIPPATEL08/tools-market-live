@@ -110,3 +110,4 @@ def remove_evidence(evidence_id: int, db: Session = Depends(get_db)):
     db.delete(ev)
     db.commit()
     return {"message": "Evidence removed from project"}
+

@@ -478,3 +478,4 @@ export const ResearchWorkspacePage: React.FC = () => {
     </div>
   );
 };
+

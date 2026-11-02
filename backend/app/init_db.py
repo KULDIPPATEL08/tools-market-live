@@ -75,10 +75,61 @@ def init_database():
                     fetch_interval_minutes=60,
                     status="active"
                 ),
+                Source(
+                    name="Reddit r/LocalLLaMA Intelligence",
+                    type="reddit",
+                    category="Reddit Intelligence",
+                    url="https://www.reddit.com/r/LocalLLaMA",
+                    description="Community discussions on self-hosted open-source models, quantized weights, and fine-tuning benchmarks.",
+                    config_json='{"subreddit": "LocalLLaMA"}',
+                    fetch_interval_minutes=30,
+                    status="active"
+                ),
+                Source(
+                    name="Hugging Face Trending AI Models",
+                    type="huggingface",
+                    category="New AI Models",
+                    url="https://huggingface.co/models",
+                    description="Real-time releases of state-of-the-art weights, vision models, and reasoning LLMs.",
+                    config_json='{"type": "models"}',
+                    fetch_interval_minutes=30,
+                    status="active"
+                ),
+                Source(
+                    name="Hugging Face Daily AI Papers",
+                    type="huggingface",
+                    category="Research Papers",
+                    url="https://huggingface.co/papers",
+                    description="Top community-upvoted machine learning and multimodal research papers.",
+                    config_json='{"type": "papers"}',
+                    fetch_interval_minutes=60,
+                    status="active"
+                ),
+                Source(
+                    name="Live Tech News & Startups Stream",
+                    type="technews",
+                    category="Tech News & Startups",
+                    url="https://techcrunch.com",
+                    description="Parallel live ingestion from TechCrunch, The Verge, and major developer outlets.",
+                    fetch_interval_minutes=15,
+                    status="active"
+                ),
             ]
             db.add_all(sources)
             db.commit()
             logger.info("Initial sources created.")
+        else:
+            # Add new live sources if they don't exist yet
+            extra_sources = [
+                ("Reddit r/LocalLLaMA Intelligence", "reddit", "Reddit Intelligence", "https://www.reddit.com/r/LocalLLaMA", "Community discussions on self-hosted open-source models, quantized weights, and fine-tuning benchmarks.", '{"subreddit": "LocalLLaMA"}', 30),
+                ("Hugging Face Trending AI Models", "huggingface", "New AI Models", "https://huggingface.co/models", "Real-time releases of state-of-the-art weights, vision models, and reasoning LLMs.", '{"type": "models"}', 30),
+                ("Hugging Face Daily AI Papers", "huggingface", "Research Papers", "https://huggingface.co/papers", "Top community-upvoted machine learning and multimodal research papers.", '{"type": "papers"}', 60),
+                ("Live Tech News & Startups Stream", "technews", "Tech News & Startups", "https://techcrunch.com", "Parallel live ingestion from TechCrunch, The Verge, and major developer outlets.", "{}", 15),
+            ]
+            for name, stype, cat, url, desc, cfg, interval in extra_sources:
+                if not db.query(Source).filter(Source.name == name).first():
+                    db.add(Source(name=name, type=stype, category=cat, url=url, description=desc, config_json=cfg, fetch_interval_minutes=interval, status="active"))
+            db.commit()
 
         # 3. Seed Starter Verified Records
         if db.query(CollectedRecord).count() == 0:
@@ -244,3 +295,4 @@ def init_database():
 
 if __name__ == "__main__":
     init_database()
+

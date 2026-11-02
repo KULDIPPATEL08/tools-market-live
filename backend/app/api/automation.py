@@ -66,3 +66,4 @@ def delete_rule(rule_id: int, db: Session = Depends(get_db)):
     db.delete(rule)
     db.commit()
     return {"message": "Automation rule deleted"}
+

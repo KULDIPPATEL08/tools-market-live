@@ -14,3 +14,4 @@ class AutomationRule(Base):
     is_active = Column(Boolean, default=True)
     last_run_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+

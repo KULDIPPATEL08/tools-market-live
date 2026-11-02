@@ -88,3 +88,4 @@ def get_charts_data(db: Session = Depends(get_db)):
         "job_status_breakdown": job_data,
         "quality_distribution": quality_data
     }
+

@@ -189,7 +189,7 @@ export const DiscoverPage: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-[11px] font-mono text-slate-500 mr-2 uppercase">Connector:</span>
-          {['rss', 'github', 'hackernews', 'webpage', 'file'].map((type) => (
+          {['rss', 'reddit', 'huggingface', 'technews', 'github', 'hackernews', 'webpage', 'file'].map((type) => (
             <button
               key={type}
               onClick={() => handleTypeSelect(type)}
@@ -372,3 +372,4 @@ export const DiscoverPage: React.FC = () => {
     </div>
   );
 };
+

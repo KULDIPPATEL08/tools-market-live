@@ -61,3 +61,4 @@ async def fetch_rss_feed(url: str) -> List[Dict[str, Any]]:
         })
 
     return records
+

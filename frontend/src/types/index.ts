@@ -7,7 +7,7 @@ export interface User {
   created_at: string;
 }
 
-export type SourceType = 'rss' | 'github' | 'hackernews' | 'webpage' | 'file' | 'api';
+export type SourceType = 'rss' | 'github' | 'hackernews' | 'webpage' | 'file' | 'api' | 'reddit' | 'huggingface' | 'technews';
 export type SourceStatus = 'active' | 'paused' | 'syncing' | 'failed' | 'disconnected';
 
 export interface Source {
@@ -154,3 +154,4 @@ export interface OverviewMetrics {
   duplicate_count: number;
   gaps_count: number;
 }
+

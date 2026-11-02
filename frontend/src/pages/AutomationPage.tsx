@@ -232,3 +232,4 @@ export const AutomationPage: React.FC = () => {
     </div>
   );
 };
+

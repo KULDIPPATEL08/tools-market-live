@@ -41,3 +41,4 @@ export const useUIStore = create<UIState>((set) => ({
   globalSearchQuery: '',
   setGlobalSearchQuery: (globalSearchQuery) => set({ globalSearchQuery }),
 }));
+

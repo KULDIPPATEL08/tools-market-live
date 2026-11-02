@@ -68,3 +68,4 @@ async def fetch_github_repositories(query: str = "stars:>1000", limit: int = 15)
         })
 
     return records
+

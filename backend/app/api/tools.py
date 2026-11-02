@@ -172,3 +172,4 @@ def get_duplicate_stats(db: Session = Depends(get_db)):
         "potential_duplicate_groups": len(dupe_titles),
         "details": [{"title": t[0], "count": t[1]} for t in dupe_titles[:10]]
     }
+

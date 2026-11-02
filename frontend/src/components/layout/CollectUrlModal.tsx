@@ -105,3 +105,4 @@ export const CollectUrlModal: React.FC = () => {
     </Modal>
   );
 };
+

@@ -86,3 +86,4 @@ def analyze_and_generate_gaps(db: Session) -> List[Gap]:
         db.commit()
 
     return identified_gaps
+

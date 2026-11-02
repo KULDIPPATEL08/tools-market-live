@@ -22,3 +22,4 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ rows = 4, clas
     </div>
   );
 };
+

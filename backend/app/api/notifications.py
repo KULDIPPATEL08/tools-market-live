@@ -31,3 +31,4 @@ def mark_all_read(db: Session = Depends(get_db)):
     db.query(Notification).filter(Notification.is_read == False).update({"is_read": True})
     db.commit()
     return {"status": "success"}
+

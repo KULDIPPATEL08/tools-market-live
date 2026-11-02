@@ -14,6 +14,7 @@ import {
   AlertCircle,
   Send,
   MessageSquare,
+  Zap,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { Card } from '../components/ui/Card';
@@ -50,6 +51,32 @@ export const ToolsWorkspacePage: React.FC = () => {
     queryFn: api.getDuplicateStats,
     enabled: activeTab === 'data-cleaner',
   });
+
+  // Tool 5: Fast Batch Scraper
+  const [batchUrlsInput, setBatchUrlsInput] = useState('');
+  const [batchLoading, setBatchLoading] = useState(false);
+  const [batchResult, setBatchResult] = useState<any | null>(null);
+  const [batchError, setBatchError] = useState<string | null>(null);
+
+  const handleBatchScrape = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const urls = batchUrlsInput
+      .split('\n')
+      .map((u) => u.trim())
+      .filter((u) => u.length > 5);
+    if (urls.length === 0) return;
+    setBatchLoading(true);
+    setBatchError(null);
+    setBatchResult(null);
+    try {
+      const res = await api.scrapeBatch(urls);
+      setBatchResult(res);
+    } catch (err: any) {
+      setBatchError(err.message || 'Batch scrape failed');
+    } finally {
+      setBatchLoading(false);
+    }
+  };
 
   const handleCollectUrl = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +158,7 @@ export const ToolsWorkspacePage: React.FC = () => {
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-2">
         {[
           { id: 'url-collector', label: 'URL Collector', icon: Globe },
+          { id: 'batch-scraper', label: 'Fast Batch Scraper', icon: Zap },
           { id: 'file-importer', label: 'CSV / JSON Ingestion', icon: Upload },
           { id: 'data-cleaner', label: 'Duplicate Inspector', icon: Database },
           { id: 'ai-assistant', label: 'AI Evidence Assistant', icon: Sparkles },
@@ -214,7 +242,72 @@ export const ToolsWorkspacePage: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 2: File Ingestion */}
+      {/* Tab 2: Fast Batch Scraper */}
+      {activeTab === 'batch-scraper' && (
+        <div className="space-y-6 max-w-3xl">
+          <Card
+            title="Fast Batch Multi-URL Scraper"
+            subtitle="Scrape up to 20 websites in parallel with worker pooling, text extraction, and deduplication."
+          >
+            <form onSubmit={handleBatchScrape} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono uppercase text-slate-300 mb-1">
+                  Target URLs (One per line)
+                </label>
+                <textarea
+                  rows={6}
+                  required
+                  placeholder={"https://news.ycombinator.com\nhttps://techcrunch.com/category/artificial-intelligence/\nhttps://huggingface.co/papers"}
+                  value={batchUrlsInput}
+                  onChange={(e) => setBatchUrlsInput(e.target.value)}
+                  className="w-full bg-space-900 font-mono border border-slate-700/80 rounded-lg p-3 text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                />
+              </div>
+
+              <div className="flex justify-between items-center pt-1">
+                <span className="text-[11px] font-mono text-slate-500">
+                  Runs with max concurrency of 8 workers with SSRF validation.
+                </span>
+                <Button variant="primary" size="md" type="submit" isLoading={batchLoading} leftIcon={<Zap className="w-3.5 h-3.5" />}>
+                  Start Parallel Scrape
+                </Button>
+              </div>
+
+              {batchError && (
+                <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg text-rose-400 text-xs flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{batchError}</span>
+                </div>
+              )}
+
+              {batchResult && (
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-2">
+                  <div className="flex items-center space-x-2 text-emerald-400 text-xs font-semibold">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>Parallel Batch Scraping Succeeded</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 font-mono text-xs pt-1">
+                    <div className="p-2 bg-space-950 rounded border border-slate-800">
+                      <span className="text-slate-400 block text-[10px]">SCRAPED URLS</span>
+                      <span className="text-slate-100 font-bold">{batchResult.scraped_count}</span>
+                    </div>
+                    <div className="p-2 bg-space-950 rounded border border-slate-800">
+                      <span className="text-emerald-400 block text-[10px]">SAVED NEW</span>
+                      <span className="text-emerald-400 font-bold">+{batchResult.saved_count}</span>
+                    </div>
+                    <div className="p-2 bg-space-950 rounded border border-slate-800">
+                      <span className="text-amber-400 block text-[10px]">DUPLICATES SKIPPED</span>
+                      <span className="text-amber-400 font-bold">{batchResult.duplicates_skipped}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </form>
+          </Card>
+        </div>
+      )}
+
+      {/* Tab 3: File Ingestion */}
       {activeTab === 'file-importer' && (
         <div className="space-y-6 max-w-3xl">
           <Card title="CSV / JSON Dataset Ingestion" subtitle="Upload structured files to parse and store into Scoutboard records.">
@@ -418,3 +511,4 @@ export const ToolsWorkspacePage: React.FC = () => {
     </div>
   );
 };
+

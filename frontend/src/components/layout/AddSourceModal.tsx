@@ -9,7 +9,7 @@ export const AddSourceModal: React.FC<{ onSourceAdded?: () => void }> = ({ onSou
   const { activeQuickAction, setActiveQuickAction } = useUIStore();
   const isOpen = activeQuickAction === 'source';
   const [name, setName] = useState('');
-  const [type, setType] = useState<'rss' | 'github' | 'hackernews' | 'webpage'>('rss');
+  const [type, setType] = useState<'rss' | 'github' | 'hackernews' | 'webpage' | 'reddit' | 'huggingface' | 'technews'>('rss');
   const [url, setUrl] = useState('');
   const [category, setCategory] = useState('Technology');
   const [fetchInterval, setFetchInterval] = useState(60);
@@ -88,6 +88,9 @@ export const AddSourceModal: React.FC<{ onSourceAdded?: () => void }> = ({ onSou
               className="w-full bg-space-900 border border-slate-700/80 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
             >
               <option value="rss">RSS / Atom Feed</option>
+              <option value="reddit">Reddit Subreddit (e.g. LocalLLaMA)</option>
+              <option value="huggingface">Hugging Face (Trending Models/Papers)</option>
+              <option value="technews">Live Tech News & Outlets</option>
               <option value="github">GitHub Public API</option>
               <option value="hackernews">Hacker News Stories</option>
               <option value="webpage">Public Webpage</option>
@@ -108,10 +111,16 @@ export const AddSourceModal: React.FC<{ onSourceAdded?: () => void }> = ({ onSou
           </div>
         </div>
 
-        {type !== 'hackernews' && (
+        {type !== 'hackernews' && type !== 'technews' && (
           <div>
             <label className="block text-xs font-semibold uppercase text-slate-300 mb-1 font-mono">
-              {type === 'github' ? 'GitHub Query / Repo URL (Optional)' : 'Source Feed / Web URL'}
+              {type === 'github'
+                ? 'GitHub Query / Repo URL (Optional)'
+                : type === 'reddit'
+                ? 'Subreddit Name / URL'
+                : type === 'huggingface'
+                ? 'Hugging Face Filter / URL'
+                : 'Source Feed / Web URL'}
             </label>
             <input
               type={type === 'rss' || type === 'webpage' ? 'url' : 'text'}
@@ -119,6 +128,10 @@ export const AddSourceModal: React.FC<{ onSourceAdded?: () => void }> = ({ onSou
               placeholder={
                 type === 'rss'
                   ? 'https://example.com/rss.xml'
+                  : type === 'reddit'
+                  ? 'r/LocalLLaMA'
+                  : type === 'huggingface'
+                  ? 'https://huggingface.co/models'
                   : type === 'github'
                   ? 'topic:machine-learning stars:>5000'
                   : 'https://example.com/article'
@@ -162,3 +175,4 @@ export const AddSourceModal: React.FC<{ onSourceAdded?: () => void }> = ({ onSou
     </Modal>
   );
 };
+

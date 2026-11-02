@@ -72,3 +72,4 @@ async def fetch_hn_stories(story_type: str = "topstories", limit: int = 15) -> L
         })
 
     return records
+

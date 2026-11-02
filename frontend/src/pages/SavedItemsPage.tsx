@@ -130,3 +130,4 @@ export const SavedItemsPage: React.FC = () => {
     </div>
   );
 };
+

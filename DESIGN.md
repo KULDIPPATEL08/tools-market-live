@@ -106,3 +106,4 @@ Fonts loaded via web standards:
 - ❌ No fake AI animation bars or fake percentages.
 - ❌ No raw unhandled exceptions or silent empty tables without explanations.
 - ❌ No blocking modal walls for simple tasks.
+

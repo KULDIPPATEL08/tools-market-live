@@ -245,3 +245,4 @@ class OverviewMetricsResponse(BaseModel):
     collection_success_rate: float
     duplicate_count: int
     gaps_count: int
+

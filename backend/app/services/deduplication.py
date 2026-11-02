@@ -55,3 +55,4 @@ def calculate_quality_score(record_dict: Dict[str, Any]) -> float:
         score += 0.05
 
     return round(min(score, 1.0), 2)
+

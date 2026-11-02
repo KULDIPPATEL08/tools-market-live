@@ -118,3 +118,4 @@ All 14 unit and end-to-end workflow tests will run:
 | **Workflow C** | Create research project → Markdown notes → Evidence citations → Export dossier | ✅ Verified |
 | **Workflow D** | Create automation rule → Interval trigger → Gap scan → Notifications | ✅ Verified |
 | **Workflow E** | CSV / JSON file ingestion → Schema mapping → Deduplication → CSV export | ✅ Verified |
+

@@ -207,3 +207,4 @@ export const CollectionJobsPage: React.FC = () => {
     </div>
   );
 };
+

@@ -13,6 +13,10 @@ from backend.app.services.connectors.rss import fetch_rss_feed
 from backend.app.services.connectors.github import fetch_github_repositories
 from backend.app.services.connectors.hackernews import fetch_hn_stories
 from backend.app.services.connectors.webpage import fetch_webpage
+from backend.app.services.connectors.reddit import fetch_reddit_posts
+from backend.app.services.connectors.huggingface import fetch_huggingface_trending_models, fetch_huggingface_daily_papers
+from backend.app.services.connectors.tech_news import fetch_live_tech_news
+from backend.app.services.fast_scraper import fast_batch_scrape
 
 logger = logging.getLogger("scoutboard.collection")
 
@@ -74,6 +78,31 @@ async def run_collection_job(
                 except Exception:
                     pass
             raw_items = await fetch_hn_stories(story_type=story_type)
+        elif source.type == "reddit":
+            sub = "LocalLLaMA"
+            if source.url and "reddit.com/r/" in source.url:
+                sub = source.url.split("/r/")[-1].strip("/").split("/")[0]
+            elif source.config_json:
+                try:
+                    cfg = json.loads(source.config_json)
+                    sub = cfg.get("subreddit", sub)
+                except Exception:
+                    pass
+            raw_items = await fetch_reddit_posts(subreddit=sub)
+        elif source.type == "huggingface":
+            sub_type = "models"
+            if source.config_json:
+                try:
+                    cfg = json.loads(source.config_json)
+                    sub_type = cfg.get("type", "models")
+                except Exception:
+                    pass
+            if sub_type == "papers" or (source.url and "papers" in source.url):
+                raw_items = await fetch_huggingface_daily_papers(limit=20)
+            else:
+                raw_items = await fetch_huggingface_trending_models(limit=25)
+        elif source.type == "technews":
+            raw_items = await fetch_live_tech_news(limit_per_feed=6)
         elif source.type == "webpage":
             single_record = await fetch_webpage(source.url)
             raw_items = [single_record]
@@ -177,3 +206,40 @@ async def run_collection_job(
         db.refresh(job)
 
     return job
+
+async def fast_sync_all_active_sources(db: Session) -> Dict[str, Any]:
+    """
+    Rapid parallel sync across all active sources simultaneously.
+    """
+    import asyncio
+    sources = db.query(Source).filter(Source.status == "active").all()
+    if not sources:
+        return {"status": "no_active_sources", "synced_count": 0, "results": []}
+
+    tasks = [run_collection_job(db=db, source_id=s.id, trigger_type="fast_sync_all") for s in sources]
+    completed_jobs = await asyncio.gather(*tasks, return_exceptions=True)
+
+    summary = []
+    total_saved = 0
+    for idx, res in enumerate(completed_jobs):
+        src = sources[idx]
+        if isinstance(res, Exception):
+            summary.append({"source": src.name, "status": "failed", "error": str(res)})
+        else:
+            total_saved += res.records_saved
+            summary.append({
+                "source": src.name,
+                "status": res.status,
+                "records_retrieved": res.records_retrieved,
+                "records_saved": res.records_saved,
+                "duplicates_skipped": res.duplicates_detected
+            })
+
+    return {
+        "status": "success",
+        "synced_sources_count": len(sources),
+        "total_new_records_saved": total_saved,
+        "details": summary
+    }
+
+

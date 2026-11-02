@@ -34,3 +34,4 @@ class CollectedRecord(Base):
     is_bookmarked = Column(Boolean, default=False, index=True)
 
     source = relationship("Source", backref="records")
+
